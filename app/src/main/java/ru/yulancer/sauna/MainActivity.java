@@ -17,12 +17,14 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
 
     //private IModbusActor mActor = new Modbus4jActor("192.168.1.77", 502);
     //private IModbusActor mActor = new Modbus4jActor("localhost", 502);
-    //private IModbusActor mActor = new Modbus4jActor("10.0.2.2", 502);
-    private IModbusActor mActor = new J2modActor("10.0.2.2", 502);
+    private IModbusActor mActor = new Modbus4jActor("10.0.2.2", 502);
+    //private IModbusActor mActor = new J2modActor("10.0.2.2", 502);
 
     @Override
     public void onSaveSettings(SaunaSettings saunaSettings) {
         mSaunaSettings = saunaSettings;
+        SaveSettingsTask t = new SaveSettingsTask();
+        t.execute();
     }
 
     class RefreshValuesTask extends AsyncTask<Void, Void, SaunaInfo> {
@@ -66,6 +68,11 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
                 tvDoorSauna.setText(saunaInfo.DoorSaunaOpen ? "открыта" : "закрыта");
                 tvDoorShower.setText(saunaInfo.DoorShowerOpen ? "открыта" : "закрыта");
                 tbSaunaOn.setChecked(saunaInfo.SaunaOn);
+
+                mSaunaSettings.SaunaSetpoint = saunaInfo.SaunaSetpoint;
+                mSaunaSettings.BoilerSetpoint= saunaInfo.BoilerSetpoint;
+                mSaunaSettings.RoomSetpoint = saunaInfo.RoomSetpoint;
+
                 tvException.setText("");
             } else {
                 t0.setText("");
@@ -133,7 +140,5 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
         FragmentManager fm = getSupportFragmentManager();
         SettingsDialog dialog = SettingsDialog.newInstance(mSaunaSettings);
         dialog.show(fm, "settings");
-        //StartSaunaTask t = new StartSaunaTask();
-        //t.execute();
     }
 }

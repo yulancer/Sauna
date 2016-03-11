@@ -8,8 +8,11 @@ import com.serotonin.modbus4j.code.DataType;
 import com.serotonin.modbus4j.exception.ModbusTransportException;
 import com.serotonin.modbus4j.ip.IpParameters;
 import com.serotonin.modbus4j.locator.BaseLocator;
+import com.serotonin.modbus4j.locator.NumericLocator;
 import com.serotonin.modbus4j.msg.WriteCoilsRequest;
 import com.serotonin.modbus4j.msg.WriteCoilsResponse;
+import com.serotonin.modbus4j.msg.WriteRegistersRequest;
+import com.serotonin.modbus4j.msg.WriteRegistersResponse;
 
 import java.util.List;
 
@@ -105,6 +108,30 @@ public class Modbus4jActor implements IModbusActor {
 
     @Override
     public boolean SaveSettings(SaunaSettings saunaSettings) {
+
+        IpParameters ipParameters = new IpParameters();
+        ipParameters.setHost(mHost);
+        ipParameters.setPort(mPort);
+
+        ModbusFactory modbusFactory = new ModbusFactory();
+        ModbusMaster master = modbusFactory.createTcpMaster(ipParameters, false);
+        master.setTimeout(2000);
+        int slaveId = 1;
+        try {
+            NumericLocator locator = (NumericLocator) BaseLocator.holdingRegister(slaveId, 0, DataType.FOUR_BYTE_FLOAT_SWAPPED);
+
+            WriteRegistersRequest request = new WriteRegistersRequest(slaveId, 10, locator.valueToShorts(saunaSettings.SaunaSetpoint));
+            WriteRegistersResponse response = (WriteRegistersResponse) master.send(request);
+
+            request = new WriteRegistersRequest(slaveId, 12, locator.valueToShorts(saunaSettings.BoilerSetpoint));
+            response = (WriteRegistersResponse) master.send(request);
+
+            request = new WriteRegistersRequest(slaveId, 14, locator.valueToShorts(saunaSettings.RoomSetpoint));
+            response = (WriteRegistersResponse) master.send(request);
+        } catch (ModbusTransportException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 }
