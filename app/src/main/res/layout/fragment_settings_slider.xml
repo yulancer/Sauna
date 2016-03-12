@@ -1,0 +1,82 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsDialog">
+
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:columnCount="3"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="Сауна"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <SeekBar
+            android:id="@+id/sbSauna"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="fill_horizontal"
+            android:max="110"
+            android:progress="50"
+            android:layout_columnWeight="1" />
+
+        <TextView
+            android:id="@+id/tvSetpointSaunaDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="00"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+      <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Бойлер"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <SeekBar
+            android:id="@+id/sbBoiler"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="fill_horizontal"
+            android:max="60" />
+
+        <TextView
+            android:id="@+id/tvSetpointBoilerDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="00"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Комната"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <SeekBar
+            android:id="@+id/sbRoom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="fill_horizontal"
+            android:max="30" />
+
+        <TextView
+            android:id="@+id/tvSetpointRoomDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="00"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    </GridLayout>
+</FrameLayout>
