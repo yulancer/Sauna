@@ -151,16 +151,15 @@
             android:text="I"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnTest"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
-            android:gravity="center|center_horizontal"
-            android:drawableLeft="@android:drawable/stat_notify_sync"
+            android:gravity="center"
             android:onClick="onClick"
-            />
+            android:src="@drawable/ic_notification_sync" />
 
         <ToggleButton
             android:id="@+id/btnSaunaOn"
@@ -169,20 +168,22 @@
             android:layout_height="wrap_content"
             android:layout_columnSpan="2"
             android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:onClick="onStartClick"
             android:textOff="Включить"
-            android:textOn="Выключить"
-            android:onClick="onStartClick"/>
-        <Button
+            android:textOn="Выключить" />
+
+        <ImageButton
             android:id="@+id/btnSetup"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
-            android:gravity="center|center_horizontal"
-            android:drawableLeft="@android:drawable/ic_dialog_info"
+            android:gravity="center"
             android:onClick="onSettingsClick"
-            />
+            android:src="@drawable/ic_thermometer" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -216,12 +217,13 @@
             android:gravity="center_horizontal"
             android:text="000.00"
             android:textAppearance="?android:attr/textAppearanceSmall" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
             android:layout_columnWeight="1"
             android:gravity="center_horizontal"
-            android:layout_columnSpan="2"
             android:text="Дверь в душ"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -229,18 +231,18 @@
             android:id="@+id/tvDoorShower"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
             android:layout_columnWeight="1"
             android:gravity="center_horizontal"
-            android:layout_columnSpan="2"
             android:text="-----"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
             android:layout_columnWeight="1"
             android:gravity="center_horizontal"
-            android:layout_columnSpan="2"
             android:text="Дверь в сауну"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -248,18 +250,18 @@
             android:id="@+id/tvDoorSauna"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
             android:layout_columnWeight="1"
             android:gravity="center_horizontal"
-            android:layout_columnSpan="2"
             android:text="-----"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
+            android:id="@+id/tvException"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
             android:layout_columnSpan="4"
-            android:id="@+id/tvException" />
+            android:text="" />
 
     </GridLayout>
 

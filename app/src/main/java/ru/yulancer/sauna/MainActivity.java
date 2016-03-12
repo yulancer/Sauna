@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -46,14 +47,14 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
 
             ProgressBar p = (ProgressBar) findViewById(R.id.progressBar);
             p.setVisibility(View.GONE);
-            Button b = (Button) findViewById(R.id.btnTest);
+            ImageButton b = (ImageButton) findViewById(R.id.btnTest);
             b.setEnabled(true);
         }
 
 
         @Override
         protected void onPreExecute() {
-            Button b = (Button) findViewById(R.id.btnTest);
+            ImageButton b = (ImageButton) findViewById(R.id.btnTest);
             b.setEnabled(false);
             ProgressBar p = (ProgressBar) findViewById(R.id.progressBar);
             p.setVisibility(View.VISIBLE);
