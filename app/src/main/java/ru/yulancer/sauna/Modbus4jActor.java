@@ -29,10 +29,7 @@ public class Modbus4jActor implements IModbusActor {
         mPort = port;
     }
 
-    @Override
-    public SaunaInfo GetSaunaInfo() {
-
-        SaunaInfo saunaInfo = new SaunaInfo();
+    private ModbusMaster CreateMaster(){
 
         IpParameters ipParameters = new IpParameters();
         ipParameters.setHost(mHost);
@@ -41,7 +38,16 @@ public class Modbus4jActor implements IModbusActor {
 
         ModbusFactory modbusFactory = new ModbusFactory();
         ModbusMaster master = modbusFactory.createTcpMaster(ipParameters, false);
-        master.setTimeout(2000);
+        master.setTimeout(200);
+        master.setRetries(100);
+        return  master;
+    }
+    @Override
+    public SaunaInfo GetSaunaInfo() {
+
+        SaunaInfo saunaInfo = new SaunaInfo();
+
+        ModbusMaster master = CreateMaster();
 
         BatchResults<Integer> results = null;
         BatchRead<Integer> batch = new BatchRead<Integer>();
@@ -88,13 +94,8 @@ public class Modbus4jActor implements IModbusActor {
 
     @Override
     public void SendSwitchSignal() {
-        IpParameters ipParameters = new IpParameters();
-        ipParameters.setHost(mHost);
-        ipParameters.setPort(mPort);
+        ModbusMaster master = CreateMaster();
 
-        ModbusFactory modbusFactory = new ModbusFactory();
-        ModbusMaster master = modbusFactory.createTcpMaster(ipParameters, false);
-        master.setTimeout(2000);
         int slaveId = 1;
         if (master.testSlaveNode(slaveId))
             try {
@@ -109,13 +110,8 @@ public class Modbus4jActor implements IModbusActor {
     @Override
     public boolean SaveSettings(SaunaSettings saunaSettings) {
 
-        IpParameters ipParameters = new IpParameters();
-        ipParameters.setHost(mHost);
-        ipParameters.setPort(mPort);
+        ModbusMaster master = CreateMaster();
 
-        ModbusFactory modbusFactory = new ModbusFactory();
-        ModbusMaster master = modbusFactory.createTcpMaster(ipParameters, false);
-        master.setTimeout(2000);
         int slaveId = 1;
         try {
             NumericLocator locator = (NumericLocator) BaseLocator.holdingRegister(slaveId, 0, DataType.FOUR_BYTE_FLOAT_SWAPPED);

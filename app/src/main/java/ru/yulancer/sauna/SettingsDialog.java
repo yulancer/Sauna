@@ -8,6 +8,11 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 
 public class SettingsDialog extends DialogFragment implements DialogInterface.OnClickListener {
     // the fragment initialization parameters, exception.g. ARG_ITEM_NUMBER
@@ -82,18 +87,27 @@ public class SettingsDialog extends DialogFragment implements DialogInterface.On
         mListener = null;
     }
 
+    private Float ParseLocal(String strValue) throws ParseException {
+        Locale currentLocale = getResources().getConfiguration().locale;
+        NumberFormat nf = NumberFormat.getInstance(currentLocale);
+        Number parsedNumber = nf.parse(strValue);
+        return parsedNumber.floatValue();
+    }
+
     @Override
     public void onClick(DialogInterface dialog, int which) {
         EditText etSauna = (EditText) form.findViewById(R.id.etSauna);
         EditText etBoiler = (EditText) form.findViewById(R.id.etBoiler);
         EditText etRoom = (EditText) form.findViewById(R.id.etRoom);
         try {
-            float tempSauna = Float.parseFloat(etSauna.getText().toString());
-            float tempBoiler = Float.parseFloat(etBoiler.getText().toString());
-            float tempRoom = Float.parseFloat(etRoom.getText().toString());
+            float tempSauna = ParseLocal(etSauna.getText().toString());
+            float tempBoiler = ParseLocal(etBoiler.getText().toString());
+            float tempRoom = ParseLocal(etRoom.getText().toString());
             mSaunaSettings = new SaunaSettings(tempSauna, tempBoiler, tempRoom);
             mListener.onSaveSettings(mSaunaSettings);
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
+            TextView tvException = (TextView) getActivity().findViewById(R.id.tvException);
+            tvException.setText(e.toString());
             e.printStackTrace();
         }
     }
