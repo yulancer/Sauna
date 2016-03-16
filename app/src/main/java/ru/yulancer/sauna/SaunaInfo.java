@@ -22,6 +22,9 @@ public class SaunaInfo implements Parcelable {
     public boolean DoorSaunaOpen;
     public boolean DoorShowerOpen;
     public boolean SaunaOn;
+    public boolean SaunaReady;
+    public boolean BoilerReady;
+    public boolean RoomReady;
 
     public SaunaInfo(){
 

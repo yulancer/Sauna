@@ -130,7 +130,7 @@
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
             android:gravity="center_horizontal"
-            android:text="I"
+            android:text="\?"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
@@ -139,7 +139,7 @@
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
             android:gravity="center_horizontal"
-            android:text="I"
+            android:text="\?"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
@@ -148,14 +148,49 @@
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
             android:gravity="center_horizontal"
-            android:text="I"
+            android:text="\?"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:gravity="center_horizontal"
+            android:text="Готовность"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/tvSaunaReady"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:gravity="center_horizontal"
+            android:text="\?"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/tvBoilerReady"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:gravity="center_horizontal"
+            android:text="\?"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/tvRoomReady"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:gravity="center_horizontal"
+            android:text="\?"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <ImageButton
             android:id="@+id/btnTest"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_columnWeight="1"
             android:gravity="center"
             android:onClick="onClick"

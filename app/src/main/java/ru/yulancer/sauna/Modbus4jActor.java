@@ -88,6 +88,9 @@ public class Modbus4jActor implements IModbusActor {
             saunaInfo.DoorSaunaOpen = (flags & 16) == 16;
             saunaInfo.DoorShowerOpen = (flags & 32) == 32;
             saunaInfo.SaunaOn = (flags & 64) == 64;
+            saunaInfo.SaunaReady = (flags & 128) == 128;
+            saunaInfo.BoilerReady = (flags & 256) == 256;
+            saunaInfo.RoomReady = (flags & 512) == 512;
         }
         return saunaInfo;
     }

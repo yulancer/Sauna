@@ -1,5 +1,6 @@
 package ru.yulancer.sauna;
 
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -13,6 +14,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import static ru.yulancer.sauna.R.color.colorHeaterReady;
+import static ru.yulancer.sauna.R.color.colorHeaterWarming;
+
 public class MainActivity extends FragmentActivity implements SettingsDialog.OnFragmentInteractionListener {
 
     public static final String SaunaInfoTag = "SaunaInfoTag";
@@ -20,9 +24,8 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
     private SaunaSettings mSaunaSettings = new SaunaSettings();
     private SaunaInfo mSaunaInfo;
 
-    private IModbusActor mActor = new Modbus4jActor("192.168.1.77", 502);
-    //private IModbusActor mActor = new Modbus4jActor("localhost", 502);
-    // private IModbusActor mActor = new Modbus4jActor("10.0.2.2", 502);
+    //private IModbusActor mActor = new Modbus4jActor("192.168.1.77", 502);
+     private IModbusActor mActor = new Modbus4jActor("10.0.2.2", 502);
     //private IModbusActor mActor = new J2modActor("10.0.2.2", 502);
 
     @Override
@@ -97,6 +100,11 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
             TextView tvDoorSauna = (TextView) findViewById(R.id.tvDoorSauna);
             ToggleButton tbSaunaOn = (ToggleButton) findViewById(R.id.btnSaunaOn);
             TextView tvException = (TextView) findViewById(R.id.tvException);
+
+            TextView tvSaunaReady = (TextView) findViewById(R.id.tvSaunaReady);
+            TextView tvBoilerReady = (TextView) findViewById(R.id.tvBoilerReady);
+            TextView tvRoomReady = (TextView) findViewById(R.id.tvRoomReady);
+
             if (mSaunaInfo.exception == null) {
                 t0.setText(String.format("%.2f", mSaunaInfo.SaunaCurrentTemp));
                 t1.setText(String.format("%.2f", mSaunaInfo.BoilerCurrentTemp));
@@ -119,6 +127,22 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
                 mSaunaSettings.RoomSetpoint = mSaunaInfo.RoomSetpoint;
 
                 tvException.setText("");
+
+                if (!mSaunaInfo.SaunaOn) {
+                    tvSaunaReady.setText("Выкл");
+                    tvSaunaReady.setTextColor(Color.GRAY);
+                    tvRoomReady.setText("Выкл");
+                    tvRoomReady.setTextColor(Color.GRAY);
+                    tvBoilerReady.setText("Выкл");
+                    tvBoilerReady.setTextColor(Color.GRAY);
+                } else {
+                    tvSaunaReady.setText(mSaunaInfo.SaunaReady ? "Готова" : "Нагрев");
+                    tvSaunaReady.setTextColor(getResources().getColor(mSaunaInfo.SaunaReady ? colorHeaterReady : colorHeaterWarming));
+                    tvBoilerReady.setText(mSaunaInfo.BoilerReady ? "Готова" : "Нагрев");
+                    tvBoilerReady.setTextColor(getResources().getColor(mSaunaInfo.BoilerReady ? colorHeaterReady : colorHeaterWarming));
+                    tvRoomReady.setText(mSaunaInfo.RoomReady ? "Готова" : "Нагрев");
+                    tvRoomReady.setTextColor(getResources().getColor(mSaunaInfo.RoomReady ? colorHeaterReady : colorHeaterWarming));
+                }
             } else {
                 t0.setText("");
                 t1.setText("");
@@ -129,6 +153,13 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
                 t6.setText("");
                 t7.setText("");
                 tvException.setText(mSaunaInfo.exception.getLocalizedMessage());
+
+                tvSaunaReady.setText("?");
+                tvSaunaReady.setTextColor(Color.GRAY);
+                tvRoomReady.setText("?");
+                tvRoomReady.setTextColor(Color.GRAY);
+                tvBoilerReady.setText("?");
+                tvBoilerReady.setTextColor(Color.GRAY);
             }
         }
     }
