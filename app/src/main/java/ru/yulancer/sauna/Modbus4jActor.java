@@ -62,6 +62,10 @@ public class Modbus4jActor implements IModbusActor {
         batch.addLocator(6, BaseLocator.holdingRegister(slaveId, 12, DataType.FOUR_BYTE_FLOAT_SWAPPED));
         batch.addLocator(7, BaseLocator.holdingRegister(slaveId, 14, DataType.FOUR_BYTE_FLOAT_SWAPPED));
         batch.addLocator(8, BaseLocator.holdingRegister(slaveId, 16, DataType.TWO_BYTE_INT_UNSIGNED));
+        batch.addLocator(9, BaseLocator.holdingRegister(slaveId, 18, DataType.FOUR_BYTE_INT_UNSIGNED));
+        batch.addLocator(10, BaseLocator.holdingRegister(slaveId, 20, DataType.FOUR_BYTE_INT_UNSIGNED));
+        batch.addLocator(11, BaseLocator.holdingRegister(slaveId, 22, DataType.FOUR_BYTE_INT_UNSIGNED));
+        batch.addLocator(12, BaseLocator.holdingRegister(slaveId, 24, DataType.FOUR_BYTE_INT_UNSIGNED));
 
         try {
             master.init();
@@ -91,6 +95,11 @@ public class Modbus4jActor implements IModbusActor {
             saunaInfo.SaunaReady = (flags & 128) == 128;
             saunaInfo.BoilerReady = (flags & 256) == 256;
             saunaInfo.RoomReady = (flags & 512) == 512;
+
+            saunaInfo.SaunaSecondsRemain = results.getLongValue(9);
+            saunaInfo.BoilerSecondsRemain = results.getLongValue(10);
+            saunaInfo.RoomSecondsRemain = results.getLongValue(11);
+            saunaInfo.AllSecondsRemain = results.getLongValue(12);
         }
         return saunaInfo;
     }
