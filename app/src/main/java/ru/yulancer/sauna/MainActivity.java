@@ -4,15 +4,20 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 
 import static ru.yulancer.sauna.R.color.colorHeaterReady;
 import static ru.yulancer.sauna.R.color.colorHeaterWarming;
@@ -136,11 +141,19 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
                     tvBoilerReady.setText("Выкл");
                     tvBoilerReady.setTextColor(Color.GRAY);
                 } else {
-                    tvSaunaReady.setText(mSaunaInfo.SaunaReady ? "Готова" : "Нагрев");
+                    LocalTime currentTime = new LocalTime ();
+                    DateTimeFormatter fmt = DateTimeFormat.shortTime().withLocale(getResources().getConfiguration().locale);
+
+                    LocalTime saunaReadyTime = currentTime.plusSeconds((int) mSaunaInfo.SaunaSecondsRemain);
+                    tvSaunaReady.setText(mSaunaInfo.SaunaReady ? "Готова" : fmt.print(saunaReadyTime));
                     tvSaunaReady.setTextColor(getResources().getColor(mSaunaInfo.SaunaReady ? colorHeaterReady : colorHeaterWarming));
-                    tvBoilerReady.setText(mSaunaInfo.BoilerReady ? "Готова" : "Нагрев");
+
+                    LocalTime boilerReadyTime = currentTime.plusSeconds((int) mSaunaInfo.BoilerSecondsRemain);
+                    tvBoilerReady.setText(mSaunaInfo.BoilerReady ? "Готова" : fmt.print(boilerReadyTime));
                     tvBoilerReady.setTextColor(getResources().getColor(mSaunaInfo.BoilerReady ? colorHeaterReady : colorHeaterWarming));
-                    tvRoomReady.setText(mSaunaInfo.RoomReady ? "Готова" : "Нагрев");
+
+                    LocalTime roomReadyTime = currentTime.plusSeconds((int) mSaunaInfo.RoomSecondsRemain);
+                    tvRoomReady.setText(mSaunaInfo.RoomReady ? "Готова" : fmt.print(roomReadyTime));
                     tvRoomReady.setTextColor(getResources().getColor(mSaunaInfo.RoomReady ? colorHeaterReady : colorHeaterWarming));
                 }
             } else {
