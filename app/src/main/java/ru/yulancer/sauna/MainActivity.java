@@ -12,12 +12,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 
 import static ru.yulancer.sauna.R.color.colorHeaterReady;
 import static ru.yulancer.sauna.R.color.colorHeaterWarming;
@@ -30,7 +27,7 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
     private SaunaInfo mSaunaInfo;
 
     //private IModbusActor mActor = new Modbus4jActor("192.168.1.77", 502);
-     private IModbusActor mActor = new Modbus4jActor("10.0.2.2", 502);
+    private IModbusActor mActor = new Modbus4jActor("10.0.2.2", 502);
     //private IModbusActor mActor = new J2modActor("10.0.2.2", 502);
 
     @Override
@@ -111,68 +108,108 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
             TextView tvRoomReady = (TextView) findViewById(R.id.tvRoomReady);
 
             if (mSaunaInfo.exception == null) {
-                t0.setText(String.format("%.2f", mSaunaInfo.SaunaCurrentTemp));
-                t1.setText(String.format("%.2f", mSaunaInfo.BoilerCurrentTemp));
-                t2.setText(String.format("%.2f", mSaunaInfo.RoomCurrentTemp));
-                t3.setText(String.format("%.2f", mSaunaInfo.WaterPipeCurrentTemp));
-                t4.setText(String.format("%.2f", mSaunaInfo.OutdoorCurrentTemp));
-                t5.setText(String.format("%.2f", mSaunaInfo.SaunaSetpoint));
-                t6.setText(String.format("%.2f", mSaunaInfo.BoilerSetpoint));
-                t7.setText(String.format("%.2f", mSaunaInfo.RoomSetpoint));
+                if (t0 != null)
+                    t0.setText(String.format("%.2f", mSaunaInfo.SaunaCurrentTemp));
+                if (t1 != null)
+                    t1.setText(String.format("%.2f", mSaunaInfo.BoilerCurrentTemp));
+                if (t2 != null)
+                    t2.setText(String.format("%.2f", mSaunaInfo.RoomCurrentTemp));
+                if (t3 != null)
+                    t3.setText(String.format("%.2f", mSaunaInfo.WaterPipeCurrentTemp));
+                if (t4 != null)
+                    t4.setText(String.format("%.2f", mSaunaInfo.OutdoorCurrentTemp));
+                if (t5 != null)
+                    t5.setText(String.format("%.2f", mSaunaInfo.SaunaSetpoint));
+                if (t6 != null)
+                    t6.setText(String.format("%.2f", mSaunaInfo.BoilerSetpoint));
+                if (t7 != null)
+                    t7.setText(String.format("%.2f", mSaunaInfo.RoomSetpoint));
 
-                tvSaunaHeaterStatus.setText(mSaunaInfo.SaunaHeaterOn ? "I" : "O");
-                tvBoilerHeaterStatus.setText(mSaunaInfo.BoilerHeaterOn ? "I" : "O");
-                tvRoomHeaterStatus.setText(mSaunaInfo.RoomHeaterOn ? "I" : "O");
-                tvDoorSauna.setText(mSaunaInfo.DoorSaunaOpen ? "открыта" : "закрыта");
-                tvDoorShower.setText(mSaunaInfo.DoorShowerOpen ? "открыта" : "закрыта");
-                tbSaunaOn.setChecked(mSaunaInfo.SaunaOn);
+                if (tvSaunaHeaterStatus != null)
+                    tvSaunaHeaterStatus.setText(mSaunaInfo.SaunaHeaterOn ? "I" : "O");
+                if (tvBoilerHeaterStatus != null)
+                    tvBoilerHeaterStatus.setText(mSaunaInfo.BoilerHeaterOn ? "I" : "O");
+                if (tvRoomHeaterStatus != null)
+                    tvRoomHeaterStatus.setText(mSaunaInfo.RoomHeaterOn ? "I" : "O");
+                if (tvDoorSauna != null)
+                    tvDoorSauna.setText(mSaunaInfo.DoorSaunaOpen ? "открыта" : "закрыта");
+                if (tvDoorShower != null)
+                    tvDoorShower.setText(mSaunaInfo.DoorShowerOpen ? "открыта" : "закрыта");
+                if (tbSaunaOn != null)
+                    tbSaunaOn.setChecked(mSaunaInfo.SaunaOn);
 
                 mSaunaSettings.SaunaSetpoint = mSaunaInfo.SaunaSetpoint;
                 mSaunaSettings.BoilerSetpoint = mSaunaInfo.BoilerSetpoint;
                 mSaunaSettings.RoomSetpoint = mSaunaInfo.RoomSetpoint;
 
-                tvException.setText("");
+                if (tvException != null)
+                    tvException.setText("");
 
                 if (!mSaunaInfo.SaunaOn) {
-                    tvSaunaReady.setText("Выкл");
-                    tvSaunaReady.setTextColor(Color.GRAY);
-                    tvRoomReady.setText("Выкл");
-                    tvRoomReady.setTextColor(Color.GRAY);
-                    tvBoilerReady.setText("Выкл");
-                    tvBoilerReady.setTextColor(Color.GRAY);
+                    if (tvSaunaReady != null) {
+                        tvSaunaReady.setText("Выкл");
+                        tvSaunaReady.setTextColor(Color.GRAY);
+                    }
+                    if (tvRoomReady != null) {
+                        tvRoomReady.setText("Выкл");
+                        tvRoomReady.setTextColor(Color.GRAY);
+                    }
+                    if (tvBoilerReady != null) {
+                        tvBoilerReady.setText("Выкл");
+                        tvBoilerReady.setTextColor(Color.GRAY);
+                    }
                 } else {
-                    LocalTime currentTime = new LocalTime ();
+                    LocalTime currentTime = new LocalTime();
                     DateTimeFormatter fmt = DateTimeFormat.shortTime().withLocale(getResources().getConfiguration().locale);
 
                     LocalTime saunaReadyTime = currentTime.plusSeconds((int) mSaunaInfo.SaunaSecondsRemain);
-                    tvSaunaReady.setText(mSaunaInfo.SaunaReady ? "Готова" : fmt.print(saunaReadyTime));
-                    tvSaunaReady.setTextColor(getResources().getColor(mSaunaInfo.SaunaReady ? colorHeaterReady : colorHeaterWarming));
-
+                    if (tvSaunaReady != null) {
+                        tvSaunaReady.setText(mSaunaInfo.SaunaReady ? "Готова" : fmt.print(saunaReadyTime));
+                        tvSaunaReady.setTextColor(getResources().getColor(mSaunaInfo.SaunaReady ? colorHeaterReady : colorHeaterWarming));
+                    }
                     LocalTime boilerReadyTime = currentTime.plusSeconds((int) mSaunaInfo.BoilerSecondsRemain);
-                    tvBoilerReady.setText(mSaunaInfo.BoilerReady ? "Готова" : fmt.print(boilerReadyTime));
-                    tvBoilerReady.setTextColor(getResources().getColor(mSaunaInfo.BoilerReady ? colorHeaterReady : colorHeaterWarming));
-
+                    if (tvBoilerReady != null) {
+                        tvBoilerReady.setText(mSaunaInfo.BoilerReady ? "Готова" : fmt.print(boilerReadyTime));
+                        tvBoilerReady.setTextColor(getResources().getColor(mSaunaInfo.BoilerReady ? colorHeaterReady : colorHeaterWarming));
+                    }
                     LocalTime roomReadyTime = currentTime.plusSeconds((int) mSaunaInfo.RoomSecondsRemain);
-                    tvRoomReady.setText(mSaunaInfo.RoomReady ? "Готова" : fmt.print(roomReadyTime));
-                    tvRoomReady.setTextColor(getResources().getColor(mSaunaInfo.RoomReady ? colorHeaterReady : colorHeaterWarming));
+                    if (tvRoomReady != null) {
+                        tvRoomReady.setText(mSaunaInfo.RoomReady ? "Готова" : fmt.print(roomReadyTime));
+                        tvRoomReady.setTextColor(getResources().getColor(mSaunaInfo.RoomReady ? colorHeaterReady : colorHeaterWarming));
+                    }
                 }
             } else {
-                t0.setText("");
-                t1.setText("");
-                t2.setText("");
-                t3.setText("");
-                t4.setText("");
-                t5.setText("");
-                t6.setText("");
-                t7.setText("");
-                tvException.setText(mSaunaInfo.exception.getLocalizedMessage());
+                if (t0 != null)
+                    t0.setText("");
+                if (t1 != null)
+                    t1.setText("");
+                if (t2 != null)
+                    t2.setText("");
+                if (t3 != null)
+                    t3.setText("");
+                if (t4 != null)
+                    t4.setText("");
+                if (t5 != null)
+                    t5.setText("");
+                if (t6 != null)
+                    t6.setText("");
+                if (t7 != null)
+                    t7.setText("");
+                if (tvException != null)
+                    tvException.setText(mSaunaInfo.exception.getLocalizedMessage());
 
-                tvSaunaReady.setText("?");
-                tvSaunaReady.setTextColor(Color.GRAY);
-                tvRoomReady.setText("?");
-                tvRoomReady.setTextColor(Color.GRAY);
-                tvBoilerReady.setText("?");
-                tvBoilerReady.setTextColor(Color.GRAY);
+                if (tvSaunaReady != null) {
+                    tvSaunaReady.setText("?");
+                    tvSaunaReady.setTextColor(Color.GRAY);
+                }
+                if (tvRoomReady != null) {
+                    tvRoomReady.setText("?");
+                    tvRoomReady.setTextColor(Color.GRAY);
+                }
+                if (tvBoilerReady != null) {
+                    tvBoilerReady.setText("?");
+                    tvBoilerReady.setTextColor(Color.GRAY);
+                }
             }
         }
     }
