@@ -26,8 +26,8 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
     private SaunaSettings mSaunaSettings = new SaunaSettings();
     private SaunaInfo mSaunaInfo;
 
-    //private IModbusActor mActor = new Modbus4jActor("192.168.1.77", 502);
-    private IModbusActor mActor = new Modbus4jActor("10.0.2.2", 502);
+    private IModbusActor mActor = new Modbus4jActor("192.168.1.77", 502);
+    //private IModbusActor mActor = new Modbus4jActor("10.0.2.2", 502);
     //private IModbusActor mActor = new J2modActor("10.0.2.2", 502);
 
     @Override
