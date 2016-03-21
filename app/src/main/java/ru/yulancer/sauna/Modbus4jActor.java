@@ -50,7 +50,7 @@ public class Modbus4jActor implements IModbusActor {
         ModbusMaster master = CreateMaster();
 
         BatchResults<Integer> results = null;
-        BatchRead<Integer> batch = new BatchRead<Integer>();
+        BatchRead<Integer> batch = new BatchRead<>();
         int slaveId = 1;
 
         batch.addLocator(0, BaseLocator.holdingRegister(slaveId, 0, DataType.FOUR_BYTE_FLOAT_SWAPPED));
@@ -95,6 +95,9 @@ public class Modbus4jActor implements IModbusActor {
             saunaInfo.SaunaReady = (flags & 128) == 128;
             saunaInfo.BoilerReady = (flags & 256) == 256;
             saunaInfo.RoomReady = (flags & 512) == 512;
+            saunaInfo.SaunaRemainHistorical = (flags & 1024) == 1024;
+            saunaInfo.BoilerRemainHistorical = (flags & 2048) == 2048;
+            saunaInfo.RoomRemainHistorical = (flags & 4096) == 4096;
 
             saunaInfo.SaunaSecondsRemain = results.getLongValue(9);
             saunaInfo.BoilerSecondsRemain = results.getLongValue(10);

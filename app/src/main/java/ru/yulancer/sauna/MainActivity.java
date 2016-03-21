@@ -26,8 +26,8 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
     private SaunaSettings mSaunaSettings = new SaunaSettings();
     private SaunaInfo mSaunaInfo;
 
-    private IModbusActor mActor = new Modbus4jActor("192.168.1.77", 502);
-    //private IModbusActor mActor = new Modbus4jActor("10.0.2.2", 502);
+    //private IModbusActor mActor = new Modbus4jActor("192.168.1.77", 502);
+    private IModbusActor mActor = new Modbus4jActor("10.0.2.2", 502);
     //private IModbusActor mActor = new J2modActor("10.0.2.2", 502);
 
     @Override
@@ -145,39 +145,10 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
                 if (tvException != null)
                     tvException.setText("");
 
-                if (!mSaunaInfo.SaunaOn) {
-                    if (tvSaunaReady != null) {
-                        tvSaunaReady.setText("Выкл");
-                        tvSaunaReady.setTextColor(Color.GRAY);
-                    }
-                    if (tvRoomReady != null) {
-                        tvRoomReady.setText("Выкл");
-                        tvRoomReady.setTextColor(Color.GRAY);
-                    }
-                    if (tvBoilerReady != null) {
-                        tvBoilerReady.setText("Выкл");
-                        tvBoilerReady.setTextColor(Color.GRAY);
-                    }
-                } else {
-                    LocalTime currentTime = new LocalTime();
-                    DateTimeFormatter fmt = DateTimeFormat.shortTime().withLocale(getResources().getConfiguration().locale);
+                remainSecondsOutput(tvSaunaReady, mSaunaInfo.SaunaSecondsRemain, mSaunaInfo.SaunaOn, mSaunaInfo.SaunaReady, mSaunaInfo.SaunaRemainHistorical);
+                remainSecondsOutput(tvBoilerReady, mSaunaInfo.BoilerSecondsRemain, mSaunaInfo.SaunaOn, mSaunaInfo.BoilerReady, mSaunaInfo.BoilerRemainHistorical);
+                remainSecondsOutput(tvRoomReady, mSaunaInfo.RoomSecondsRemain, mSaunaInfo.SaunaOn, mSaunaInfo.RoomReady, mSaunaInfo.RoomRemainHistorical);
 
-                    LocalTime saunaReadyTime = currentTime.plusSeconds((int) mSaunaInfo.SaunaSecondsRemain);
-                    if (tvSaunaReady != null) {
-                        tvSaunaReady.setText(mSaunaInfo.SaunaReady ? "Готова" : fmt.print(saunaReadyTime));
-                        tvSaunaReady.setTextColor(getResources().getColor(mSaunaInfo.SaunaReady ? colorHeaterReady : colorHeaterWarming));
-                    }
-                    LocalTime boilerReadyTime = currentTime.plusSeconds((int) mSaunaInfo.BoilerSecondsRemain);
-                    if (tvBoilerReady != null) {
-                        tvBoilerReady.setText(mSaunaInfo.BoilerReady ? "Готова" : fmt.print(boilerReadyTime));
-                        tvBoilerReady.setTextColor(getResources().getColor(mSaunaInfo.BoilerReady ? colorHeaterReady : colorHeaterWarming));
-                    }
-                    LocalTime roomReadyTime = currentTime.plusSeconds((int) mSaunaInfo.RoomSecondsRemain);
-                    if (tvRoomReady != null) {
-                        tvRoomReady.setText(mSaunaInfo.RoomReady ? "Готова" : fmt.print(roomReadyTime));
-                        tvRoomReady.setTextColor(getResources().getColor(mSaunaInfo.RoomReady ? colorHeaterReady : colorHeaterWarming));
-                    }
-                }
             } else {
                 if (t0 != null)
                     t0.setText("");
@@ -212,6 +183,20 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
                 }
             }
         }
+    }
+
+    private void remainSecondsOutput(TextView tv, long seconds, boolean isOn, boolean isReady, boolean isHistorical) {
+        if (tv == null)
+            return;
+        if (!isOn) {
+            tv.setText("Выкл");
+            tv.setTextColor(Color.GRAY);
+        }
+        LocalTime currentTime = new LocalTime();
+        DateTimeFormatter fmt = DateTimeFormat.shortTime().withLocale(getResources().getConfiguration().locale);
+        LocalTime readyTime = currentTime.plusSeconds((int) seconds);
+        tv.setText(isReady ? "Готова" : ((isHistorical ? "~" : "") + fmt.print(readyTime)));
+        tv.setTextColor(getResources().getColor(isReady ? colorHeaterReady : colorHeaterWarming));
     }
 
     @Override
