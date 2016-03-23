@@ -16,6 +16,9 @@ import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import static ru.yulancer.sauna.R.color.colorHeaterReady;
 import static ru.yulancer.sauna.R.color.colorHeaterWarming;
 
@@ -25,10 +28,11 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
 
     private SaunaSettings mSaunaSettings = new SaunaSettings();
     private SaunaInfo mSaunaInfo;
+    private Timer mTimer;
 
-    //private IModbusActor mActor = new Modbus4jActor("192.168.1.77", 502);
-    private IModbusActor mActor = new Modbus4jActor("10.0.2.2", 502);
-    //private IModbusActor mActor = new J2modActor("10.0.2.2", 502);
+    //private IModbusActor mActivityActor = new Modbus4jActor("192.168.1.77", 502);
+    private IModbusActor mActivityActor = new Modbus4jActor("10.0.2.2", 502);
+    //private IModbusActor mActivityActor = new J2modActor("10.0.2.2", 502);
 
     @Override
     public void onSaveSettings(SaunaSettings saunaSettings) {
@@ -37,12 +41,29 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
         t.execute();
     }
 
+    class SaunaQueryTask extends TimerTask {
+
+        private IModbusActor mTaskActor = new Modbus4jActor("10.0.2.2", 502);
+
+        @Override
+        public void run() {
+            MainActivity.this.mSaunaInfo = mTaskActor.GetSaunaInfo();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    MainActivity.this.RefreshSaunaInfo();
+                }
+            });
+        }
+
+    }
+
     class RefreshValuesTask extends AsyncTask<Void, Void, SaunaInfo> {
 
         @Override
         protected SaunaInfo doInBackground(Void... params) {
 
-            return mActor.GetSaunaInfo();
+            return mActivityActor.GetSaunaInfo();
         }
 
         @Override
@@ -71,7 +92,7 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
 
         @Override
         protected SaunaInfo doInBackground(Void... params) {
-            mActor.SendSwitchSignal();
+            mActivityActor.SendSwitchSignal();
             return super.doInBackground(params);
         }
     }
@@ -80,7 +101,7 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
 
         @Override
         protected SaunaInfo doInBackground(Void... params) {
-            mActor.SaveSettings(mSaunaSettings);
+            mActivityActor.SaveSettings(mSaunaSettings);
             return super.doInBackground(params);
         }
     }
@@ -219,6 +240,19 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (mTimer != null)
+            mTimer.cancel();
+        mTimer = new Timer();
+        SaunaQueryTask saunaQueryTask = new SaunaQueryTask();
+        mTimer.schedule(saunaQueryTask, 0, 5000);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (mTimer != null)
+            mTimer.cancel();
     }
 
     public void onClick(View v) {
