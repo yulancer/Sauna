@@ -194,7 +194,8 @@
             android:layout_columnWeight="1"
             android:gravity="center"
             android:onClick="onClick"
-            android:src="@drawable/ic_notification_sync" />
+            android:src="@drawable/ic_notification_sync"
+            android:visibility="invisible" />
 
         <ToggleButton
             android:id="@+id/btnSaunaOn"

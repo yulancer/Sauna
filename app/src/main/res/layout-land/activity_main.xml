@@ -133,8 +133,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/ic_heater_on"
-                />
+                android:src="@drawable/ic_heater_on" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -296,11 +295,16 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/button"
+        <Switch
+            android:id="@+id/mainSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Button" />
+            android:showText="true"
+            android:textOff="Выключено"
+            android:textOn="Включено"
+            android:thumb="@drawable/customswitchselector"
+            android:track="@drawable/custom_track" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -317,7 +321,7 @@
             android:orientation="horizontal">
 
             <TextView
-                 android:layout_width="wrap_content"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Снаружи "
                 android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -373,19 +377,19 @@
                 android:layout_height="40dip">
 
                 <ImageView
+                    android:id="@+id/ivConnectStatus"
                     android:layout_width="32dip"
                     android:layout_height="32dip"
-                    android:id="@+id/ivConnectStatus"
-                    android:src="@drawable/ic_connect"
                     android:layout_gravity="center"
-                    android:layout_margin="5dp" />
+                    android:layout_margin="5dp"
+                    android:src="@drawable/ic_connect" />
 
                 <ProgressBar
+                    android:id="@id/progressBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@id/progressBar"
                     android:layout_gravity="center"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </FrameLayout>
 
         </LinearLayout>

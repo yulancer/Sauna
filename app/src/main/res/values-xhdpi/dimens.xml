@@ -1,0 +1,6 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="big_temperature_size" >64sp</dimen>
+    <dimen name="setpoint_size" >12sp</dimen>
+    <dimen name="ready_time_size" >12sp</dimen>
+</resources>

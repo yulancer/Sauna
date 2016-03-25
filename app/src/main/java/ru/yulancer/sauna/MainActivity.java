@@ -7,10 +7,13 @@ import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import org.joda.time.LocalTime;
@@ -23,7 +26,7 @@ import java.util.TimerTask;
 import static ru.yulancer.sauna.R.color.colorHeaterReady;
 import static ru.yulancer.sauna.R.color.colorHeaterWarming;
 
-public class MainActivity extends FragmentActivity implements SettingsDialog.OnFragmentInteractionListener {
+public class MainActivity extends FragmentActivity implements SettingsDialog.OnFragmentInteractionListener, CompoundButton.OnCheckedChangeListener {
 
     public static final String SaunaInfoTag = "SaunaInfoTag";
 
@@ -81,6 +84,30 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
 
     }
 
+    abstract class BaseCommunicationTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            ImageView b = (ImageView) findViewById(R.id.ivConnectStatus);
+            if (b != null)
+                b.setVisibility(View.GONE);
+            ProgressBar p = (ProgressBar) findViewById(R.id.progressBar);
+            if (p != null)
+                p.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(Void params) {
+            RefreshSaunaInfo();
+
+            ImageView b = (ImageView) findViewById(R.id.ivConnectStatus);
+            if (b != null)
+                b.setVisibility(View.VISIBLE);
+            ProgressBar p = (ProgressBar) findViewById(R.id.progressBar);
+            if (p != null)
+                p.setVisibility(View.GONE);
+        }
+    }
+
     class RefreshValuesTask extends AsyncTask<Void, Void, SaunaInfo> {
 
         @Override
@@ -111,12 +138,13 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
 
     }
 
-    class StartSaunaTask extends RefreshValuesTask {
+    class StartSaunaTask extends BaseCommunicationTask {
 
         @Override
-        protected SaunaInfo doInBackground(Void... params) {
+        protected Void doInBackground(Void... params) {
             mActivityActor.SendSwitchSignal();
-            return super.doInBackground(params);
+            recreateRefreshTimer();
+            return null;
         }
     }
 
@@ -193,6 +221,10 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
 
                 if (tbSaunaOn != null)
                     tbSaunaOn.setChecked(mSaunaInfo.SaunaOn);
+                Switch mainSwitch = (Switch) findViewById(R.id.mainSwitch);
+                if (mainSwitch != null) {
+                    mainSwitch.setChecked(mSaunaInfo.SaunaOn);
+                }
 
                 mSaunaSettings.SaunaSetpoint = mSaunaInfo.SaunaSetpoint;
                 mSaunaSettings.BoilerSetpoint = mSaunaInfo.BoilerSetpoint;
@@ -247,6 +279,11 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
         mTimer.schedule(saunaQueryTask, 1000, 15000);
     }
 
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        StartSaunaTask t = new StartSaunaTask();
+        t.execute();
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         if (mSaunaInfo != null) {
@@ -267,6 +304,10 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Switch mainSwitch = (Switch) findViewById(R.id.mainSwitch);
+        if (mainSwitch != null) {
+            mainSwitch.setOnCheckedChangeListener(this);
+        }
         recreateRefreshTimer();
     }
 
