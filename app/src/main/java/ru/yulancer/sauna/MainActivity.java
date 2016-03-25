@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -45,13 +46,35 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
 
         private IModbusActor mTaskActor = new Modbus4jActor("10.0.2.2", 502);
 
+        private void switchProgress(boolean on) {
+            ProgressBar bar = (ProgressBar) findViewById(R.id.progressBar);
+            ImageView connectIcon = (ImageView) findViewById(R.id.ivConnectStatus);
+            if (connectIcon != null)
+                connectIcon.setVisibility(on ? View.GONE : View.VISIBLE);
+            if (bar != null)
+                bar.setVisibility(on ? View.VISIBLE : View.GONE);
+        }
+
         @Override
         public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    switchProgress(true);
+                }
+            });
+
             MainActivity.this.mSaunaInfo = mTaskActor.GetSaunaInfo();
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     MainActivity.this.RefreshSaunaInfo();
+                }
+            });
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    switchProgress(false);
                 }
             });
         }
@@ -119,6 +142,9 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
             TextView tvSaunaHeaterStatus = (TextView) findViewById(R.id.tempSaunaHeaterStatus);
             TextView tvBoilerHeaterStatus = (TextView) findViewById(R.id.tempBoilerHeaterStatus);
             TextView tvRoomHeaterStatus = (TextView) findViewById(R.id.tempRoomHeaterStatus);
+            ImageView ivSaunaHeaterStatus = (ImageView) findViewById(R.id.ivSaunaHeaterStatus);
+            ImageView ivBoilerHeaterStatus = (ImageView) findViewById(R.id.ivBoilerHeaterStatus);
+            ImageView ivRoomHeaterStatus = (ImageView) findViewById(R.id.ivRoomHeaterStatus);
             TextView tvDoorShower = (TextView) findViewById(R.id.tvDoorShower);
             TextView tvDoorSauna = (TextView) findViewById(R.id.tvDoorSauna);
             ToggleButton tbSaunaOn = (ToggleButton) findViewById(R.id.btnSaunaOn);
@@ -152,10 +178,19 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
                     tvBoilerHeaterStatus.setText(mSaunaInfo.BoilerHeaterOn ? "I" : "O");
                 if (tvRoomHeaterStatus != null)
                     tvRoomHeaterStatus.setText(mSaunaInfo.RoomHeaterOn ? "I" : "O");
+
+                if (ivSaunaHeaterStatus != null)
+                    ivSaunaHeaterStatus.setVisibility(mSaunaInfo.SaunaHeaterOn ? View.VISIBLE : View.INVISIBLE);
+                if (ivBoilerHeaterStatus != null)
+                    ivBoilerHeaterStatus.setVisibility(mSaunaInfo.BoilerHeaterOn ? View.VISIBLE : View.INVISIBLE);
+                if (ivRoomHeaterStatus != null)
+                    ivRoomHeaterStatus.setVisibility(mSaunaInfo.RoomHeaterOn ? View.VISIBLE : View.INVISIBLE);
+
                 if (tvDoorSauna != null)
                     tvDoorSauna.setText(mSaunaInfo.DoorSaunaOpen ? "открыта" : "закрыта");
                 if (tvDoorShower != null)
                     tvDoorShower.setText(mSaunaInfo.DoorShowerOpen ? "открыта" : "закрыта");
+
                 if (tbSaunaOn != null)
                     tbSaunaOn.setChecked(mSaunaInfo.SaunaOn);
 
@@ -170,38 +205,22 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
                 remainSecondsOutput(tvBoilerReady, mSaunaInfo.BoilerSecondsRemain, mSaunaInfo.SaunaOn, mSaunaInfo.BoilerReady, mSaunaInfo.BoilerRemainHistorical);
                 remainSecondsOutput(tvRoomReady, mSaunaInfo.RoomSecondsRemain, mSaunaInfo.SaunaOn, mSaunaInfo.RoomReady, mSaunaInfo.RoomRemainHistorical);
 
+                ImageView connectIcon = (ImageView) findViewById(R.id.ivConnectStatus);
+                if (connectIcon != null)
+                    connectIcon.setImageResource(R.drawable.ic_connect);
+                TextView tvLastSuccessfulQuery = (TextView) findViewById(R.id.tvLastSuccessfulQuery);
+                if (tvLastSuccessfulQuery != null) {
+                    DateTimeFormatter fmt = DateTimeFormat.fullTime().withLocale(getResources().getConfiguration().locale);
+                    tvLastSuccessfulQuery.setText(String.format("Данные на %s", fmt.print(new LocalTime())));
+                }
+
             } else {
-                if (t0 != null)
-                    t0.setText("");
-                if (t1 != null)
-                    t1.setText("");
-                if (t2 != null)
-                    t2.setText("");
-                if (t3 != null)
-                    t3.setText("");
-                if (t4 != null)
-                    t4.setText("");
-                if (t5 != null)
-                    t5.setText("");
-                if (t6 != null)
-                    t6.setText("");
-                if (t7 != null)
-                    t7.setText("");
                 if (tvException != null)
                     tvException.setText(mSaunaInfo.exception.getLocalizedMessage());
 
-                if (tvSaunaReady != null) {
-                    tvSaunaReady.setText("?");
-                    tvSaunaReady.setTextColor(Color.GRAY);
-                }
-                if (tvRoomReady != null) {
-                    tvRoomReady.setText("?");
-                    tvRoomReady.setTextColor(Color.GRAY);
-                }
-                if (tvBoilerReady != null) {
-                    tvBoilerReady.setText("?");
-                    tvBoilerReady.setTextColor(Color.GRAY);
-                }
+                ImageView connectIcon = (ImageView) findViewById(R.id.ivConnectStatus);
+                if (connectIcon != null)
+                    connectIcon.setImageResource(R.drawable.ic_disconnect);
             }
         }
     }
@@ -218,6 +237,14 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
         LocalTime readyTime = currentTime.plusSeconds((int) seconds);
         tv.setText(isReady ? "Готова" : ((isHistorical ? "~" : "") + fmt.print(readyTime)));
         tv.setTextColor(getResources().getColor(isReady ? colorHeaterReady : colorHeaterWarming));
+    }
+
+    private void recreateRefreshTimer() {
+        if (mTimer != null)
+            mTimer.cancel();
+        mTimer = new Timer();
+        SaunaQueryTask saunaQueryTask = new SaunaQueryTask();
+        mTimer.schedule(saunaQueryTask, 1000, 15000);
     }
 
     @Override
@@ -240,11 +267,7 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (mTimer != null)
-            mTimer.cancel();
-        mTimer = new Timer();
-        SaunaQueryTask saunaQueryTask = new SaunaQueryTask();
-        mTimer.schedule(saunaQueryTask, 0, 5000);
+        recreateRefreshTimer();
     }
 
     @Override

@@ -36,7 +36,7 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/imageView6"
+                android:id="@+id/ivSaunaHeaterStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -127,14 +127,14 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/imageView5"
+                android:id="@+id/ivBoilerHeaterStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/ic_heater_on"
-                android:visibility="invisible" />
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -198,7 +198,7 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@drawable/border">
@@ -221,7 +221,7 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/ivRoomHeaterStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -356,16 +356,38 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="10"
-            android:gravity="right"
-            android:orientation="horizontal">
+            android:gravity="center_horizontal|right"
+            android:orientation="horizontal"
+            android:padding="3dp">
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/tvLastSuccessfulQuery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_gravity="right|center"
                 android:text="Данные на 12:43:11"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <FrameLayout
+                android:layout_width="40dip"
+                android:layout_height="40dip">
+
+                <ImageView
+                    android:layout_width="32dip"
+                    android:layout_height="32dip"
+                    android:id="@+id/ivConnectStatus"
+                    android:src="@drawable/ic_connect"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp" />
+
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@id/progressBar"
+                    android:layout_gravity="center"
+                    android:visibility="gone"/>
+            </FrameLayout>
+
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
