@@ -8,8 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="horizontal"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:text="40.8"
+                android:text="\??.\?"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="@dimen/big_temperature_size"
                 android:textStyle="bold" />
@@ -70,7 +70,7 @@
                         android:id="@id/tempSaunaSetPoint"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="65"
+                        android:text="\??"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textSize="@dimen/setpoint_size"
                         android:textStyle="bold" />
@@ -85,20 +85,12 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Готово в "
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="@dimen/ready_time_size" />
-
-                    <TextView
                         android:id="@id/tvSaunaReady"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="21:35"
+                        android:text="Готово в \??"
                         android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="@dimen/ready_time_size"
-                        android:textStyle="bold" />
+                        android:textSize="@dimen/ready_time_size" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -122,7 +114,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:text="32.5"
+                android:text="\??.\?"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="@dimen/big_temperature_size"
                 android:textStyle="bold" />
@@ -161,7 +153,7 @@
                         android:id="@id/tempBoilerSetPoint"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="65"
+                        android:text="\??"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textSize="@dimen/setpoint_size"
                         android:textStyle="bold" />
@@ -176,20 +168,12 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Готово в "
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="@dimen/ready_time_size" />
-
-                    <TextView
                         android:id="@id/tvBoilerReady"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="21:35"
+                        android:text="Готово в \??"
                         android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="@dimen/ready_time_size"
-                        android:textStyle="bold" />
+                        android:textSize="@dimen/ready_time_size" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -215,7 +199,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:text="12.3"
+                android:text="\??.\?"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="@dimen/big_temperature_size"
                 android:textStyle="bold" />
@@ -254,7 +238,7 @@
                         android:id="@id/tempRoomSetPoint"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="65"
+                        android:text="\??"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textSize="@dimen/setpoint_size"
                         android:textStyle="bold" />
@@ -269,20 +253,12 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Готово в "
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="@dimen/ready_time_size" />
-
-                    <TextView
                         android:id="@id/tvRoomReady"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="21:35"
+                        android:text="Готово в \??"
                         android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="@dimen/ready_time_size"
-                        android:textStyle="bold" />
+                        android:textSize="@dimen/ready_time_size" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -299,32 +275,32 @@
             android:id="@+id/mainSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:showText="true"
             android:textOff="Выключено"
             android:textOn="Включено"
             android:thumb="@drawable/customswitchselector"
-            android:track="@drawable/custom_track"
-            android:layout_centerInParent="true" />
+            android:track="@drawable/custom_track" />
 
         <ImageButton
+            android:id="@+id/imageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageButton"
-            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:src="@drawable/ic_settings"
-            android:onClick="onSetupClick"/>
+            android:layout_centerVertical="true"
+            android:onClick="onSetupClick"
+            android:src="@drawable/ic_settings" />
 
         <ImageButton
+            android:id="@+id/imageButton2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageButton2"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_thermo"
-            android:onClick="onSettingsClick"/>
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:onClick="onSettingsClick"
+            android:src="@drawable/ic_thermo" />
 
 
     </RelativeLayout>
@@ -333,9 +309,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
+        android:baselineAligned="false"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:baselineAligned="false">
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -353,7 +329,7 @@
                 android:id="@id/tempOutdoor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="-5"
+                android:text="\??"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
         </LinearLayout>
 
@@ -374,7 +350,7 @@
                 android:id="@id/tempWaterpipe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2.4"
+                android:text="\??.\?"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
         </LinearLayout>
@@ -392,7 +368,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center"
-                android:text="Данные на 12:43:11"
+                android:text="Данные на \??:\??:\??"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <FrameLayout

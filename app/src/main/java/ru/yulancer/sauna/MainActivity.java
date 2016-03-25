@@ -154,12 +154,10 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
             TextView tvRoomReady = (TextView) findViewById(R.id.tvRoomReady);
 
             if (mSaunaInfo.exception == null) {
-                if (t0 != null)
-                    t0.setText(String.format("%.2f", mSaunaInfo.SaunaCurrentTemp));
-                if (t1 != null)
-                    t1.setText(String.format("%.2f", mSaunaInfo.BoilerCurrentTemp));
-                if (t2 != null)
-                    t2.setText(String.format("%.2f", mSaunaInfo.RoomCurrentTemp));
+                currentTemperatureOutput(t0,mSaunaInfo.SaunaCurrentTemp, mSaunaInfo.SaunaOn, mSaunaInfo.SaunaReady);
+                currentTemperatureOutput(t1,mSaunaInfo.BoilerCurrentTemp, mSaunaInfo.SaunaOn, mSaunaInfo.BoilerReady);
+                currentTemperatureOutput(t2,mSaunaInfo.RoomCurrentTemp, mSaunaInfo.SaunaOn, mSaunaInfo.RoomReady);
+
                 if (t3 != null)
                     t3.setText(String.format("%.2f", mSaunaInfo.WaterPipeCurrentTemp));
                 if (t4 != null)
@@ -228,6 +226,16 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
         }
     }
 
+    private void currentTemperatureOutput(TextView tv, float temp, boolean isOn, boolean isReady){
+        if (tv == null)
+            return;
+        tv.setText(String.format("%.2f", temp));
+        if (!isOn) {
+            tv.setTextColor(Color.BLACK);
+        } else {
+            tv.setTextColor(getResources().getColor(isReady ? colorHeaterReady : colorHeaterWarming));
+        }
+    }
     private void remainSecondsOutput(TextView tv, long seconds, boolean isOn, boolean isReady, boolean isHistorical) {
         if (tv == null)
             return;
@@ -238,8 +246,7 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
         LocalTime currentTime = new LocalTime();
         DateTimeFormatter fmt = DateTimeFormat.shortTime().withLocale(getResources().getConfiguration().locale);
         LocalTime readyTime = currentTime.plusSeconds((int) seconds);
-        tv.setText(isReady ? "Готова" : ((isHistorical ? "~" : "") + fmt.print(readyTime)));
-        tv.setTextColor(getResources().getColor(isReady ? colorHeaterReady : colorHeaterWarming));
+        tv.setText(isReady ? "Готова" : String.format("Нагреется в %s", (isHistorical ? "~" : "") + fmt.print(readyTime)));
     }
 
     private void recreateRefreshTimer() {
