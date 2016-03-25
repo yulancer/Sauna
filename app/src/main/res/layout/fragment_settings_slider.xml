@@ -1,21 +1,21 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp"
     tools:context=".SettingsDialog">
 
 
-    <GridLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:columnCount="3"
-        android:padding="10dp">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
+            android:layout_gravity="start|center"
             android:text="Сауна"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -23,22 +23,29 @@
             android:id="@+id/sbSauna"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="fill_horizontal"
+            android:layout_gravity="fill"
+            android:layout_weight="1"
             android:max="110"
-            android:progress="50"
-            android:layout_columnWeight="1" />
+            android:progress="50" />
 
         <TextView
             android:id="@+id/tvSetpointSaunaDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_gravity="end|center"
             android:text="00"
             android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
 
-      <TextView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="start|center"
             android:text="Бойлер"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -47,19 +54,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="fill_horizontal"
+            android:layout_weight="1"
+            android:progress="30"
             android:max="60" />
 
         <TextView
             android:id="@+id/tvSetpointBoilerDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_gravity="end|center"
             android:text="00"
             android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="start|center"
             android:text="Комната"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -68,15 +83,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="fill_horizontal"
+            android:layout_weight="1"
+            android:progress="15"
             android:max="30" />
 
         <TextView
             android:id="@+id/tvSetpointRoomDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
+            android:layout_gravity="end|center"
             android:text="00"
             android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
 
-    </GridLayout>
-</FrameLayout>
+</LinearLayout>
