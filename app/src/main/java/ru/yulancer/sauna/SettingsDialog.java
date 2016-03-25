@@ -132,13 +132,6 @@ public class SettingsDialog extends DialogFragment implements DialogInterface.On
             });
             sbRoom.setProgress((int) mSaunaSettings.RoomSetpoint);
         }
-//        EditText etSauna = (EditText) form.findViewById(R.id.etSauna);
-//        etSauna.setText(String.format("%.2f", mSaunaSettings.SaunaSetpoint));
-//        EditText etBoiler = (EditText) form.findViewById(R.id.etBoiler);
-//        etBoiler.setText(String.format("%.2f", mSaunaSettings.BoilerSetpoint));
-//        EditText etRoom = (EditText) form.findViewById(R.id.etRoom);
-//        etRoom.setText(String.format("%.2f", mSaunaSettings.RoomSetpoint));
-
         return dialog;
     }
 
@@ -169,20 +162,6 @@ public class SettingsDialog extends DialogFragment implements DialogInterface.On
     @Override
     public void onClick(DialogInterface dialog, int which) {
         mListener.onSaveSettings(mSaunaSettings);
-//        EditText etSauna = (EditText) form.findViewById(R.id.etSauna);
-//        EditText etBoiler = (EditText) form.findViewById(R.id.etBoiler);
-//        EditText etRoom = (EditText) form.findViewById(R.id.etRoom);
-//        try {
-//            float tempSauna = ParseLocal(etSauna.getText().toString());
-//            float tempBoiler = ParseLocal(etBoiler.getText().toString());
-//            float tempRoom = ParseLocal(etRoom.getText().toString());
-//            mSaunaSettings = new SaunaSettings(tempSauna, tempBoiler, tempRoom);
-//            mListener.onSaveSettings(mSaunaSettings);
-//        } catch (Exception e) {
-//            TextView tvException = (TextView) getActivity().findViewById(R.id.tvException);
-//            tvException.setText(e.toString());
-//            e.printStackTrace();
-//        }
     }
 
     /**

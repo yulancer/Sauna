@@ -108,36 +108,6 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
         }
     }
 
-    class RefreshValuesTask extends AsyncTask<Void, Void, SaunaInfo> {
-
-        @Override
-        protected SaunaInfo doInBackground(Void... params) {
-
-            return mActivityActor.GetSaunaInfo();
-        }
-
-        @Override
-        protected void onPostExecute(SaunaInfo saunaInfo) {
-            mSaunaInfo = saunaInfo;
-            RefreshSaunaInfo();
-
-            ProgressBar p = (ProgressBar) findViewById(R.id.progressBar);
-            p.setVisibility(View.GONE);
-            ImageButton b = (ImageButton) findViewById(R.id.btnTest);
-            b.setEnabled(true);
-        }
-
-
-        @Override
-        protected void onPreExecute() {
-            ImageButton b = (ImageButton) findViewById(R.id.btnTest);
-            b.setEnabled(false);
-            ProgressBar p = (ProgressBar) findViewById(R.id.progressBar);
-            p.setVisibility(View.VISIBLE);
-        }
-
-    }
-
     class StartSaunaTask extends BaseCommunicationTask {
 
         @Override
@@ -148,12 +118,13 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
         }
     }
 
-    class SaveSettingsTask extends RefreshValuesTask {
+    class SaveSettingsTask extends BaseCommunicationTask {
 
         @Override
-        protected SaunaInfo doInBackground(Void... params) {
+        protected Void doInBackground(Void... params) {
             mActivityActor.SaveSettings(mSaunaSettings);
-            return super.doInBackground(params);
+            recreateRefreshTimer();
+            return null;
         }
     }
 
@@ -319,9 +290,8 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
             mTimer.cancel();
     }
 
-    public void onClick(View v) {
-        RefreshValuesTask t = new RefreshValuesTask();
-        t.execute();
+    public void onSetupClick(View v) {
+        Toast.makeText(this, "No setup implemented", Toast.LENGTH_SHORT).show();
     }
 
     public void onStartClick(View v) {
@@ -330,6 +300,7 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
     }
 
     public void onSettingsClick(View v) {
+        mTimer.cancel();
         FragmentManager fm = getSupportFragmentManager();
         SettingsDialog dialog = SettingsDialog.newInstance(mSaunaSettings);
         dialog.show(fm, "settings");
