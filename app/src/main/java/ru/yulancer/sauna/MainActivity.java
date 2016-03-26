@@ -47,7 +47,8 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
 
     class SaunaQueryTask extends TimerTask {
 
-        private IModbusActor mTaskActor = new Modbus4jActor("10.0.2.2", 502);
+       // private IModbusActor mTaskActor = new Modbus4jActor("10.0.2.2", 502);
+        private IModbusActor mTaskActor = new Modbus4jActor("192.168.1.77", 502);
 
         private void switchProgress(boolean on) {
             ProgressBar bar = (ProgressBar) findViewById(R.id.progressBar);
@@ -254,7 +255,7 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
             mTimer.cancel();
         mTimer = new Timer();
         SaunaQueryTask saunaQueryTask = new SaunaQueryTask();
-        mTimer.schedule(saunaQueryTask, 1000, 15000);
+        mTimer.schedule(saunaQueryTask, 1000, 30000);
     }
 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

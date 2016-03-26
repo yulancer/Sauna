@@ -38,8 +38,8 @@ public class Modbus4jActor implements IModbusActor {
 
         ModbusFactory modbusFactory = new ModbusFactory();
         ModbusMaster master = modbusFactory.createTcpMaster(ipParameters, false);
-        master.setTimeout(200);
-        master.setRetries(100);
+        master.setTimeout(600);
+        master.setRetries(10);
         return  master;
     }
     @Override
