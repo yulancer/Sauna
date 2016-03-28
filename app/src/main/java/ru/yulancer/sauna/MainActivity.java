@@ -142,9 +142,9 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
             ImageView ivSaunaHeaterStatus = (ImageView) findViewById(R.id.ivSaunaHeaterStatus);
             ImageView ivBoilerHeaterStatus = (ImageView) findViewById(R.id.ivBoilerHeaterStatus);
             ImageView ivRoomHeaterStatus = (ImageView) findViewById(R.id.ivRoomHeaterStatus);
-            TextView tvDoorShower = null; //(TextView) findViewById(R.id.tvDoorShower);
-            TextView tvDoorSauna = null; //(TextView) findViewById(R.id.tvDoorSauna);
-            TextView tvException = null; //(TextView) findViewById(R.id.tvException);
+            TextView tvDoorShower = (TextView) findViewById(R.id.tvDoorShower);
+            TextView tvDoorSauna = (TextView) findViewById(R.id.tvDoorSauna);
+            TextView tvException = (TextView) findViewById(R.id.tvException);
 
             TextView tvSaunaReady = (TextView) findViewById(R.id.tvSaunaReady);
             TextView tvBoilerReady = (TextView) findViewById(R.id.tvBoilerReady);
@@ -187,8 +187,10 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
                 mSaunaSettings.BoilerSetpoint = mSaunaInfo.BoilerSetpoint;
                 mSaunaSettings.RoomSetpoint = mSaunaInfo.RoomSetpoint;
 
-                if (tvException != null)
+                if (tvException != null && tvException.getVisibility() != View.GONE) {
+                    tvException.setVisibility(View.GONE);
                     tvException.setText("");
+                }
 
                 remainSecondsOutput(tvSaunaReady, mSaunaInfo.SaunaSecondsRemain, mSaunaInfo.SaunaOn, mSaunaInfo.SaunaReady, mSaunaInfo.SaunaRemainHistorical);
                 remainSecondsOutput(tvBoilerReady, mSaunaInfo.BoilerSecondsRemain, mSaunaInfo.SaunaOn, mSaunaInfo.BoilerReady, mSaunaInfo.BoilerRemainHistorical);
@@ -204,9 +206,10 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
                 }
 
             } else {
-                if (tvException != null)
+                if (tvException != null) {
                     tvException.setText(mSaunaInfo.exception.getLocalizedMessage());
-
+                    tvException.setVisibility(View.VISIBLE);
+                }
                 ImageView connectIcon = (ImageView) findViewById(R.id.ivConnectStatus);
                 if (connectIcon != null)
                     connectIcon.setImageResource(R.drawable.ic_disconnect);
