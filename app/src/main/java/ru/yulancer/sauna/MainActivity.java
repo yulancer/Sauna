@@ -34,8 +34,8 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
     private SaunaInfo mSaunaInfo;
     private Timer mTimer;
 
-    private IModbusActor mActivityActor = new Modbus4jActor("192.168.1.77", 502);
-    //private IModbusActor mActivityActor = new Modbus4jActor("10.0.2.2", 502);
+   // private IModbusActor mActivityActor = new Modbus4jActor("192.168.1.77", 502);
+    private IModbusActor mActivityActor = new Modbus4jActor("10.0.2.2", 502);
     //private IModbusActor mActivityActor = new J2modActor("10.0.2.2", 502);
 
     @Override
@@ -47,8 +47,8 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
 
     class SaunaQueryTask extends TimerTask {
 
-       // private IModbusActor mTaskActor = new Modbus4jActor("10.0.2.2", 502);
-        private IModbusActor mTaskActor = new Modbus4jActor("192.168.1.77", 502);
+         private IModbusActor mTaskActor = new Modbus4jActor("10.0.2.2", 502);
+        //private IModbusActor mTaskActor = new Modbus4jActor("192.168.1.77", 502);
 
         private void switchProgress(boolean on) {
             ProgressBar bar = (ProgressBar) findViewById(R.id.progressBar);
@@ -151,9 +151,9 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
             TextView tvRoomReady = (TextView) findViewById(R.id.tvRoomReady);
 
             if (mSaunaInfo.exception == null) {
-                currentTemperatureOutput(t0,mSaunaInfo.SaunaCurrentTemp, mSaunaInfo.SaunaOn, mSaunaInfo.SaunaReady);
-                currentTemperatureOutput(t1,mSaunaInfo.BoilerCurrentTemp, mSaunaInfo.SaunaOn, mSaunaInfo.BoilerReady);
-                currentTemperatureOutput(t2,mSaunaInfo.RoomCurrentTemp, mSaunaInfo.SaunaOn, mSaunaInfo.RoomReady);
+                currentTemperatureOutput(t0, mSaunaInfo.SaunaCurrentTemp, mSaunaInfo.SaunaOn, mSaunaInfo.SaunaReady);
+                currentTemperatureOutput(t1, mSaunaInfo.BoilerCurrentTemp, mSaunaInfo.SaunaOn, mSaunaInfo.BoilerReady);
+                currentTemperatureOutput(t2, mSaunaInfo.RoomCurrentTemp, mSaunaInfo.SaunaOn, mSaunaInfo.RoomReady);
 
                 if (t3 != null)
                     t3.setText(String.format("%.2f", mSaunaInfo.WaterPipeCurrentTemp));
@@ -173,11 +173,6 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
                 if (ivRoomHeaterStatus != null)
                     ivRoomHeaterStatus.setVisibility(mSaunaInfo.RoomHeaterOn ? View.VISIBLE : View.INVISIBLE);
 
-                if (tvDoorSauna != null)
-                    tvDoorSauna.setText(mSaunaInfo.DoorSaunaOpen ? "открыта" : "закрыта");
-                if (tvDoorShower != null)
-                    tvDoorShower.setText(mSaunaInfo.DoorShowerOpen ? "открыта" : "закрыта");
-
                 Switch mainSwitch = (Switch) findViewById(R.id.mainSwitch);
                 if (mainSwitch != null) {
                     mainSwitch.setChecked(mSaunaInfo.SaunaOn);
@@ -191,6 +186,9 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
                     tvException.setVisibility(View.GONE);
                     tvException.setText("");
                 }
+
+                if (tvDoorSauna != null)
+                    tvDoorSauna.setVisibility(mSaunaInfo.WarningSaunaStartedWithDoorOpen ? View.VISIBLE : View.GONE);
 
                 remainSecondsOutput(tvSaunaReady, mSaunaInfo.SaunaSecondsRemain, mSaunaInfo.SaunaOn, mSaunaInfo.SaunaReady, mSaunaInfo.SaunaRemainHistorical);
                 remainSecondsOutput(tvBoilerReady, mSaunaInfo.BoilerSecondsRemain, mSaunaInfo.SaunaOn, mSaunaInfo.BoilerReady, mSaunaInfo.BoilerRemainHistorical);
@@ -217,7 +215,7 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
         }
     }
 
-    private void currentTemperatureOutput(TextView tv, float temp, boolean isOn, boolean isReady){
+    private void currentTemperatureOutput(TextView tv, float temp, boolean isOn, boolean isReady) {
         if (tv == null)
             return;
         tv.setText(String.format("%.2f", temp));
@@ -227,6 +225,7 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
             tv.setTextColor(getResources().getColor(isReady ? colorHeaterReady : colorHeaterWarming));
         }
     }
+
     private void remainSecondsOutput(TextView tv, long seconds, boolean isOn, boolean isReady, boolean isHistorical) {
         if (tv == null)
             return;
