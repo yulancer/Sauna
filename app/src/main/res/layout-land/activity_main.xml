@@ -329,7 +329,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@id/tempOutdoor"
+                android:id="@+id/tempOutdoor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="\??"
@@ -350,7 +350,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@id/tempWaterpipe"
+                android:id="@+id/tempWaterpipe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="\??.\?"
@@ -387,7 +387,7 @@
                     android:src="@drawable/ic_connect" />
 
                 <ProgressBar
-                    android:id="@id/progressBar"
+                    android:id="@+id/progressBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

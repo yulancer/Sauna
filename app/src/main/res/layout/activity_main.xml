@@ -1,309 +1,409 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ru.yulancer.sauna.MainActivity">
 
-    <GridLayout
-        android:id="@+id/mainLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:columnCount="4"
-        android:orientation="horizontal"
-        android:rowCount="6">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:background="@drawable/border">
 
-
-        <TextView
+        <ImageView
+            android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="Сауна"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:src="@drawable/ic_sauna" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="Бойлер"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="Комната"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="Сейчас"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
             android:id="@+id/tempSaunaCurrent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="000.00"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="\??.\?"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="@dimen/big_temperature_size"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/ivSaunaHeaterStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_heater_on" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Задано "
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/setpoint_size" />
+
+                <TextView
+                    android:id="@+id/tempSaunaSetPoint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\??"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/setpoint_size"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvSaunaReady"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Готово в \??"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/ready_time_size" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:background="@drawable/border">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_boiler" />
 
         <TextView
             android:id="@+id/tempBoilerCurrent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="000.00"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="\??.\?"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="@dimen/big_temperature_size"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/ivBoilerHeaterStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_heater_on" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Задано "
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/setpoint_size" />
+
+                <TextView
+                    android:id="@+id/tempBoilerSetPoint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\??"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/setpoint_size"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvBoilerReady"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Готово в \??"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/ready_time_size" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:background="@drawable/border">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_room" />
 
         <TextView
             android:id="@+id/tempRoomCurrent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="000.00"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="\??.\?"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="@dimen/big_temperature_size"
+            android:textStyle="bold" />
 
-        <TextView
+        <ImageView
+            android:id="@+id/ivRoomHeaterStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="Задано"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_heater_on" />
 
-        <TextView
-            android:id="@+id/tempSaunaSetPoint"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Задано "
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/setpoint_size" />
+
+                <TextView
+                    android:id="@+id/tempRoomSetPoint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\??"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/setpoint_size"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvRoomReady"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Готово в \??"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/ready_time_size" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp">
+
+        <Switch
+            android:id="@+id/mainSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="000.00"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:id="@+id/tempBoilerSetPoint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="000.00"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:id="@+id/tempRoomSetPoint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="000.00"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="Нагрев"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:id="@+id/tempSaunaHeaterStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="\?"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:id="@+id/tempBoilerHeaterStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="\?"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:id="@+id/tempRoomHeaterStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="\?"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="Готовность"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:id="@+id/tvSaunaReady"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="\?"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:id="@+id/tvBoilerReady"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="\?"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:id="@+id/tvRoomReady"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="\?"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:layout_centerInParent="true"
+            android:showText="true"
+            android:textOff="Выключено"
+            android:textOn="Включено"
+            android:thumb="@drawable/customswitchselector"
+            android:track="@drawable/custom_track" />
 
         <ImageButton
-            android:id="@+id/btnTest"
-            style="?android:attr/buttonStyleSmall"
+            android:id="@+id/imageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
             android:onClick="onSetupClick"
-            android:src="@drawable/ic_settings"
-            />
-
-        <ToggleButton
-            android:id="@+id/btnSaunaOn"
-            style="?android:attr/buttonStyleToggle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnSpan="2"
-            android:layout_columnWeight="1"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:onClick="onStartClick"
-            android:textOff="Включить"
-            android:textOn="Выключить" />
+            android:src="@drawable/ic_settings" />
 
         <ImageButton
-            android:id="@+id/btnSetup"
-            style="?android:attr/buttonStyleSmall"
+            android:id="@+id/imageButton2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:onClick="onSettingsClick"
             android:src="@drawable/ic_thermo" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="Снаружи"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-        <TextView
-            android:id="@+id/tempOutdoor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="000.00"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </RelativeLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="Ввод воды"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:id="@+id/tempWaterpipe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="000.00"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnSpan="2"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="Дверь в душ"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:id="@+id/tvDoorShower"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnSpan="2"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="-----"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnSpan="2"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="Дверь в сауну"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:id="@+id/tvDoorSauna"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnSpan="2"
-            android:layout_columnWeight="1"
-            android:gravity="center_horizontal"
-            android:text="-----"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:id="@+id/tvException"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnSpan="4"
-            android:text="" />
-
-    </GridLayout>
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleLarge"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerVertical="true"
-        android:visibility="gone" />
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Снаружи "
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/tempOutdoor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\??"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ввод воды "
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/tempWaterpipe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\??.\?"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="end"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:gravity="center_horizontal|right"
+                android:orientation="vertical"
+                android:padding="3dp">
+
+                <TextView
+                    android:id="@+id/tvLastSuccessfulQuery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center"
+                    android:text="Данные на \??:\??:\??"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <FrameLayout
+                    android:layout_width="40dip"
+                    android:layout_height="40dip">
+
+                    <ImageView
+                        android:id="@+id/ivConnectStatus"
+                        android:layout_width="32dip"
+                        android:layout_height="32dip"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
+                        android:src="@drawable/ic_connect" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

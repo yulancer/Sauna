@@ -139,16 +139,12 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
             TextView t5 = (TextView) findViewById(R.id.tempSaunaSetPoint);
             TextView t6 = (TextView) findViewById(R.id.tempBoilerSetPoint);
             TextView t7 = (TextView) findViewById(R.id.tempRoomSetPoint);
-            TextView tvSaunaHeaterStatus = (TextView) findViewById(R.id.tempSaunaHeaterStatus);
-            TextView tvBoilerHeaterStatus = (TextView) findViewById(R.id.tempBoilerHeaterStatus);
-            TextView tvRoomHeaterStatus = (TextView) findViewById(R.id.tempRoomHeaterStatus);
             ImageView ivSaunaHeaterStatus = (ImageView) findViewById(R.id.ivSaunaHeaterStatus);
             ImageView ivBoilerHeaterStatus = (ImageView) findViewById(R.id.ivBoilerHeaterStatus);
             ImageView ivRoomHeaterStatus = (ImageView) findViewById(R.id.ivRoomHeaterStatus);
-            TextView tvDoorShower = (TextView) findViewById(R.id.tvDoorShower);
-            TextView tvDoorSauna = (TextView) findViewById(R.id.tvDoorSauna);
-            ToggleButton tbSaunaOn = (ToggleButton) findViewById(R.id.btnSaunaOn);
-            TextView tvException = (TextView) findViewById(R.id.tvException);
+            TextView tvDoorShower = null; //(TextView) findViewById(R.id.tvDoorShower);
+            TextView tvDoorSauna = null; //(TextView) findViewById(R.id.tvDoorSauna);
+            TextView tvException = null; //(TextView) findViewById(R.id.tvException);
 
             TextView tvSaunaReady = (TextView) findViewById(R.id.tvSaunaReady);
             TextView tvBoilerReady = (TextView) findViewById(R.id.tvBoilerReady);
@@ -170,13 +166,6 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
                 if (t7 != null)
                     t7.setText(String.format("%.2f", mSaunaInfo.RoomSetpoint));
 
-                if (tvSaunaHeaterStatus != null)
-                    tvSaunaHeaterStatus.setText(mSaunaInfo.SaunaHeaterOn ? "I" : "O");
-                if (tvBoilerHeaterStatus != null)
-                    tvBoilerHeaterStatus.setText(mSaunaInfo.BoilerHeaterOn ? "I" : "O");
-                if (tvRoomHeaterStatus != null)
-                    tvRoomHeaterStatus.setText(mSaunaInfo.RoomHeaterOn ? "I" : "O");
-
                 if (ivSaunaHeaterStatus != null)
                     ivSaunaHeaterStatus.setVisibility(mSaunaInfo.SaunaHeaterOn ? View.VISIBLE : View.INVISIBLE);
                 if (ivBoilerHeaterStatus != null)
@@ -189,8 +178,6 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
                 if (tvDoorShower != null)
                     tvDoorShower.setText(mSaunaInfo.DoorShowerOpen ? "открыта" : "закрыта");
 
-                if (tbSaunaOn != null)
-                    tbSaunaOn.setChecked(mSaunaInfo.SaunaOn);
                 Switch mainSwitch = (Switch) findViewById(R.id.mainSwitch);
                 if (mainSwitch != null) {
                     mainSwitch.setChecked(mSaunaInfo.SaunaOn);
