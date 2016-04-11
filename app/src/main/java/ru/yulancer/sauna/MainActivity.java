@@ -156,15 +156,15 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
                 currentTemperatureOutput(t2, mSaunaInfo.RoomCurrentTemp, mSaunaInfo.SaunaOn, mSaunaInfo.RoomReady);
 
                 if (t3 != null)
-                    t3.setText(String.format("%.2f", mSaunaInfo.WaterPipeCurrentTemp));
+                    t3.setText(String.format("%.1f", mSaunaInfo.WaterPipeCurrentTemp));
                 if (t4 != null)
-                    t4.setText(String.format("%.2f", mSaunaInfo.OutdoorCurrentTemp));
+                    t4.setText(String.format("%.1f", mSaunaInfo.OutdoorCurrentTemp));
                 if (t5 != null)
-                    t5.setText(String.format("%.2f", mSaunaInfo.SaunaSetpoint));
+                    t5.setText(String.format("%.0f", mSaunaInfo.SaunaSetpoint));
                 if (t6 != null)
-                    t6.setText(String.format("%.2f", mSaunaInfo.BoilerSetpoint));
+                    t6.setText(String.format("%.0f", mSaunaInfo.BoilerSetpoint));
                 if (t7 != null)
-                    t7.setText(String.format("%.2f", mSaunaInfo.RoomSetpoint));
+                    t7.setText(String.format("%.0f", mSaunaInfo.RoomSetpoint));
 
                 if (ivSaunaHeaterStatus != null)
                     ivSaunaHeaterStatus.setVisibility(mSaunaInfo.SaunaHeaterOn ? View.VISIBLE : View.INVISIBLE);
@@ -218,7 +218,7 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
     private void currentTemperatureOutput(TextView tv, float temp, boolean isOn, boolean isReady) {
         if (tv == null)
             return;
-        tv.setText(String.format("%.2f", temp));
+        tv.setText(String.format("%.1f", temp));
         if (!isOn) {
             tv.setTextColor(Color.BLACK);
         } else {
