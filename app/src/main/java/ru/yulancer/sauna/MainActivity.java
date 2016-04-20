@@ -8,13 +8,11 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
@@ -34,8 +32,8 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
     private SaunaInfo mSaunaInfo;
     private Timer mTimer;
 
-   // private IModbusActor mActivityActor = new Modbus4jActor("192.168.1.77", 502);
-    private IModbusActor mActivityActor = new Modbus4jActor("10.0.2.2", 502);
+    private IModbusActor mActivityActor = new Modbus4jActor("192.168.1.77", 502);
+    //private IModbusActor mActivityActor = new Modbus4jActor("10.0.2.2", 502);
     //private IModbusActor mActivityActor = new J2modActor("10.0.2.2", 502);
 
     @Override
@@ -47,8 +45,8 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
 
     class SaunaQueryTask extends TimerTask {
 
-         private IModbusActor mTaskActor = new Modbus4jActor("10.0.2.2", 502);
-        //private IModbusActor mTaskActor = new Modbus4jActor("192.168.1.77", 502);
+        //private IModbusActor mTaskActor = new Modbus4jActor("10.0.2.2", 502);
+        private IModbusActor mTaskActor = new Modbus4jActor("192.168.1.77", 502);
 
         private void switchProgress(boolean on) {
             ProgressBar bar = (ProgressBar) findViewById(R.id.progressBar);
@@ -142,7 +140,6 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
             ImageView ivSaunaHeaterStatus = (ImageView) findViewById(R.id.ivSaunaHeaterStatus);
             ImageView ivBoilerHeaterStatus = (ImageView) findViewById(R.id.ivBoilerHeaterStatus);
             ImageView ivRoomHeaterStatus = (ImageView) findViewById(R.id.ivRoomHeaterStatus);
-            TextView tvDoorShower = (TextView) findViewById(R.id.tvDoorShower);
             TextView tvDoorSauna = (TextView) findViewById(R.id.tvDoorSauna);
             TextView tvException = (TextView) findViewById(R.id.tvException);
 
@@ -236,7 +233,7 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
         LocalTime currentTime = new LocalTime();
         DateTimeFormatter fmt = DateTimeFormat.shortTime().withLocale(getResources().getConfiguration().locale);
         LocalTime readyTime = currentTime.plusSeconds((int) seconds);
-        tv.setText(isReady ? "Готова" : String.format("Нагреется в %s", (isHistorical ? "~" : "") + fmt.print(readyTime)));
+        tv.setText(isReady || seconds == 0 ? "Готова" : String.format("Нагреется в %s", (isHistorical ? "~" : "") + fmt.print(readyTime)));
     }
 
     private void recreateRefreshTimer() {
@@ -248,8 +245,10 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
     }
 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        StartSaunaTask t = new StartSaunaTask();
-        t.execute();
+        if (isChecked != mSaunaInfo.SaunaOn) {
+            StartSaunaTask t = new StartSaunaTask();
+            t.execute();
+        }
     }
 
     @Override
