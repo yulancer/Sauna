@@ -9,6 +9,8 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.TimePicker;
 
+import org.joda.time.Duration;
+import org.joda.time.Interval;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -18,7 +20,7 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
     private static final String ARG_PARAM = "start_params";
     long mSecondsRemain;
     long mSecondsDelay;
-    LocalTime dialogStartTime;
+    LocalTime mDialogStartTime;
 
     private OnFragmentInteractionListener mListener;
 
@@ -51,9 +53,9 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
 
         TimePicker tpReadyTime = (TimePicker) form.findViewById(R.id.tpReadyTime);
         if (tpReadyTime != null) {
-            dialogStartTime = new LocalTime();
+            mDialogStartTime = new LocalTime();
             DateTimeFormatter fmt = DateTimeFormat.shortTime().withLocale(getResources().getConfiguration().locale);
-            LocalTime readyTime = dialogStartTime.plusSeconds((int) mSecondsRemain);
+            LocalTime readyTime = mDialogStartTime.plusSeconds((int) mSecondsRemain);
             tpReadyTime.setCurrentHour(readyTime.getHourOfDay());
             tpReadyTime.setCurrentMinute(readyTime.getMinuteOfHour());
             tpReadyTime.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
@@ -67,6 +69,13 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
     }
 
     private void calculateStartDelay(int hourOfDay, int minute) {
+        LocalTime delayedReadyTime = new LocalTime(hourOfDay, minute);
+        LocalTime noDelayReadyTime = mDialogStartTime.plusSeconds((int) mSecondsRemain);
+        int delayMillis = delayedReadyTime.getMillisOfDay() - noDelayReadyTime.getMillisOfDay();
+        if (delayMillis > 0) {
+            mSecondsDelay = delayMillis / 1000;
+
+        }
 
     }
 
@@ -89,7 +98,7 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
-        mListener.onStartSauna(15);
+        mListener.onStartSauna(mSecondsDelay);
     }
 
     public interface OnFragmentInteractionListener {

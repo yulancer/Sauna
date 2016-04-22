@@ -120,7 +120,7 @@ public class Modbus4jActor implements IModbusActor {
         try {
             NumericLocator locator = (NumericLocator) BaseLocator.holdingRegister(slaveId, 0, DataType.FOUR_BYTE_INT_UNSIGNED_SWAPPED);
 
-            WriteRegistersRequest request = new WriteRegistersRequest(slaveId, 13, locator.valueToShorts(seconds));
+            WriteRegistersRequest request = new WriteRegistersRequest(slaveId, 26, locator.valueToShorts(seconds));
             WriteRegistersResponse response = (WriteRegistersResponse) master.send(request);
 
         } catch (ModbusTransportException e) {
