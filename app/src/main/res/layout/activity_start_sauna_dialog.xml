@@ -9,11 +9,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ru.yulancer.sauna.StartSaunaDialog">
 
-    <TextView
+    <CheckBox
+        android:id="@+id/cbDelayedStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Я стартую сауну!"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:checked="false"
+        android:text="Отложить готовность до" />
+
+    <TimePicker
+        android:id="@+id/tpReadyTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cbDelayedStart" />
 </RelativeLayout>

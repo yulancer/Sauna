@@ -7,14 +7,37 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.TimePicker;
+
+import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 public class StartSaunaDialog extends DialogFragment implements DialogInterface.OnClickListener {
 
+    private static final String ARG_PARAM = "start_params";
+    long mSecondsRemain;
+    long mSecondsDelay;
+    LocalTime dialogStartTime;
+
     private OnFragmentInteractionListener mListener;
+
+    public static StartSaunaDialog newInstance(long secondsRemain) {
+        StartSaunaDialog fragment = new StartSaunaDialog();
+        Bundle args = new Bundle();
+        args.putLong(ARG_PARAM, secondsRemain);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        if (args != null) {
+            mSecondsRemain = args.getLong(ARG_PARAM);
+        }
     }
 
     @Override
@@ -22,10 +45,29 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
         // Inflate the layout for this fragment
         View form = getActivity().getLayoutInflater().inflate(R.layout.activity_start_sauna_dialog, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        Dialog dialog = builder.setTitle("Заданные температуры").setView(form)
+        Dialog dialog = builder.setTitle("Сауна будет готова к этому часу").setView(form)
                 .setPositiveButton(android.R.string.ok, this)
                 .setNegativeButton(android.R.string.cancel, null).create();
+
+        TimePicker tpReadyTime = (TimePicker) form.findViewById(R.id.tpReadyTime);
+        if (tpReadyTime != null) {
+            dialogStartTime = new LocalTime();
+            DateTimeFormatter fmt = DateTimeFormat.shortTime().withLocale(getResources().getConfiguration().locale);
+            LocalTime readyTime = dialogStartTime.plusSeconds((int) mSecondsRemain);
+            tpReadyTime.setCurrentHour(readyTime.getHourOfDay());
+            tpReadyTime.setCurrentMinute(readyTime.getMinuteOfHour());
+            tpReadyTime.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+                @Override
+                public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                    calculateStartDelay(hourOfDay, minute);
+                }
+            });
+        }
         return dialog;
+    }
+
+    private void calculateStartDelay(int hourOfDay, int minute) {
+
     }
 
     @Override
