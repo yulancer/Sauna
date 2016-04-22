@@ -34,6 +34,9 @@ public class SaunaInfo implements Parcelable {
     public boolean BoilerRemainHistorical;
     public boolean RoomRemainHistorical;
 
+    public long SecondsBeforeStartRequested;
+    public long SecondsBeforeStartRemain;
+
     public boolean WarningSaunaStartedWithDoorOpen;
 
     public SaunaInfo() {

@@ -79,6 +79,11 @@ public class J2modActor implements IModbusActor {
     }
 
     @Override
+    public boolean SetDelayStart(long seconds) {
+        return false;
+    }
+
+    @Override
     public void SendSwitchSignal() {
 
     }

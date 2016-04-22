@@ -24,7 +24,8 @@ import java.util.TimerTask;
 import static ru.yulancer.sauna.R.color.colorHeaterReady;
 import static ru.yulancer.sauna.R.color.colorHeaterWarming;
 
-public class MainActivity extends FragmentActivity implements SettingsDialog.OnFragmentInteractionListener, CompoundButton.OnCheckedChangeListener {
+public class MainActivity extends FragmentActivity
+        implements SettingsDialog.OnFragmentInteractionListener, CompoundButton.OnCheckedChangeListener, StartSaunaDialog.OnFragmentInteractionListener {
 
     public static final String SaunaInfoTag = "SaunaInfoTag";
 
@@ -40,6 +41,13 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
     public void onSaveSettings(SaunaSettings saunaSettings) {
         mSaunaSettings = saunaSettings;
         SaveSettingsTask t = new SaveSettingsTask();
+        t.execute();
+    }
+
+    @Override
+    public void onStartSauna(long startDelay) {
+        mSaunaInfo.SecondsBeforeStartRequested = startDelay;
+        DelayedStartSaunaTask t = new DelayedStartSaunaTask();
         t.execute();
     }
 
@@ -114,6 +122,16 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
             mActivityActor.SendSwitchSignal();
             recreateRefreshTimer();
             return null;
+        }
+    }
+
+    class DelayedStartSaunaTask extends StartSaunaTask {
+        @Override
+        protected Void doInBackground(Void... params) {
+            if (mActivityActor.SetDelayStart(mSaunaInfo.SecondsBeforeStartRequested))
+                return super.doInBackground(params);
+            else
+                return null;
         }
     }
 
@@ -246,8 +264,15 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked != mSaunaInfo.SaunaOn) {
-            StartSaunaTask t = new StartSaunaTask();
-            t.execute();
+            if (isChecked) { // при включении показать диалог
+                mTimer.cancel();
+                FragmentManager fm = getSupportFragmentManager();
+                StartSaunaDialog dialog = new StartSaunaDialog();
+                dialog.show(fm, "start");
+            } else { // просто выключить
+                StartSaunaTask t = new StartSaunaTask();
+                t.execute();
+            }
         }
     }
 
@@ -288,11 +313,6 @@ public class MainActivity extends FragmentActivity implements SettingsDialog.OnF
 
     public void onSetupClick(View v) {
         Toast.makeText(this, "No setup implemented", Toast.LENGTH_SHORT).show();
-    }
-
-    public void onStartClick(View v) {
-        StartSaunaTask t = new StartSaunaTask();
-        t.execute();
     }
 
     public void onSettingsClick(View v) {

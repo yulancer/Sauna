@@ -280,8 +280,7 @@
             android:textOff="Выключено"
             android:textOn="Включено"
             android:thumb="@drawable/customswitchselector"
-            android:track="@drawable/custom_track"
-            android:onClick="onSetupClick"/>
+            android:track="@drawable/custom_track" />
 
         <ImageButton
             android:id="@+id/imageButton"

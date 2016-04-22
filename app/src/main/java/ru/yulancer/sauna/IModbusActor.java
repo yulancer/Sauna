@@ -5,6 +5,7 @@ package ru.yulancer.sauna;
  */
 public interface IModbusActor {
     public SaunaInfo GetSaunaInfo();
+    public boolean SetDelayStart(long seconds);
     public void SendSwitchSignal();
     public boolean SaveSettings(SaunaSettings saunaSettings);
 }
