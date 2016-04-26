@@ -6,14 +6,22 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
+import org.joda.time.DateTime;
 import org.joda.time.Duration;
-import org.joda.time.Interval;
 import org.joda.time.LocalTime;
+import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
+import org.joda.time.format.ISOPeriodFormat;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
 
 public class StartSaunaDialog extends DialogFragment implements DialogInterface.OnClickListener {
 
@@ -21,6 +29,10 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
     long mSecondsRemain;
     long mSecondsDelay;
     LocalTime mDialogStartTime;
+
+    TextView mTvResetDelay;
+    TextView mTvDelay;
+    TimePicker mTpReadyTime;
 
     private OnFragmentInteractionListener mListener;
 
@@ -40,6 +52,7 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
         if (args != null) {
             mSecondsRemain = args.getLong(ARG_PARAM);
         }
+
     }
 
     @Override
@@ -51,20 +64,34 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
                 .setPositiveButton(android.R.string.ok, this)
                 .setNegativeButton(android.R.string.cancel, null).create();
 
-        TimePicker tpReadyTime = (TimePicker) form.findViewById(R.id.tpReadyTime);
-        if (tpReadyTime != null) {
+        mTpReadyTime = (TimePicker) form.findViewById(R.id.tpReadyTime);
+        if (mTpReadyTime != null) {
             mDialogStartTime = new LocalTime();
             DateTimeFormatter fmt = DateTimeFormat.shortTime().withLocale(getResources().getConfiguration().locale);
             LocalTime readyTime = mDialogStartTime.plusSeconds((int) mSecondsRemain);
-            tpReadyTime.setCurrentHour(readyTime.getHourOfDay());
-            tpReadyTime.setCurrentMinute(readyTime.getMinuteOfHour());
-            tpReadyTime.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            mTpReadyTime.setCurrentHour(readyTime.getHourOfDay());
+            mTpReadyTime.setCurrentMinute(readyTime.getMinuteOfHour());
+            mTpReadyTime.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                 @Override
                 public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
                     calculateStartDelay(hourOfDay, minute);
                 }
             });
         }
+
+        //
+        mTvDelay = (TextView) form.findViewById(R.id.tvDelay);
+        mTvResetDelay = (TextView) form.findViewById(R.id.tvResetDelay);
+        SpannableString string = new SpannableString(mTvResetDelay.getText());
+        string.setSpan(new UnderlineSpan(), 0, string.length(), 0);
+        mTvResetDelay.setText(string);
+        mTvResetDelay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StartSaunaDialog.this.onResetDelayClick(v);
+            }
+        });
+
         return dialog;
     }
 
@@ -72,11 +99,33 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
         LocalTime delayedReadyTime = new LocalTime(hourOfDay, minute);
         LocalTime noDelayReadyTime = mDialogStartTime.plusSeconds((int) mSecondsRemain);
         int delayMillis = delayedReadyTime.getMillisOfDay() - noDelayReadyTime.getMillisOfDay();
-        if (delayMillis > 0) {
-            mSecondsDelay = delayMillis / 1000;
-
+        if (Math.abs(delayMillis) < 60000) //задержки меньше минуты не рассматриваем
+            delayMillis = 0;
+        if (delayMillis < 0) {             //время назад считаем следующими сутками
+            delayMillis = 24 * 3600 * 1000 - delayMillis;
         }
+        mSecondsDelay = delayMillis / 1000;
+        DateTimeFormatter fmt = ISODateTimeFormat.hourMinute();
+        PeriodFormatter formatter = new PeriodFormatterBuilder()
+                .printZeroIfSupported()
+                .appendHours()
+                .appendSuffix(":")
+                .appendMinutes()
+                .toFormatter();
+        String delayTimeString = formatter.print(new Period(delayMillis));
+        //String delayTimeString2 = ISOPeriodFormat.standard().print(new Period(70000));
+        //String delayTimeString = new DateTime(delayMillis).toString();
+        mTvDelay.setText(String.format("Задержка на %s", delayTimeString));
+        mTvResetDelay.setEnabled(mSecondsDelay > 60);
 
+    }
+
+    public void onResetDelayClick(View v) {
+        mSecondsDelay = 0;
+        LocalTime noDelayReadyTime = mDialogStartTime.plusSeconds((int) mSecondsRemain);
+        mTpReadyTime.setCurrentHour(noDelayReadyTime.getHourOfDay());
+        mTpReadyTime.setCurrentMinute(noDelayReadyTime.getMinuteOfHour());
+        mTpReadyTime.invalidate();
     }
 
     @Override

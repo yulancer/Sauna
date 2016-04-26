@@ -9,18 +9,34 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ru.yulancer.sauna.StartSaunaDialog">
 
-    <CheckBox
-        android:id="@+id/cbDelayedStart"
+    <TextView
+        android:id="@+id/tvDelay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:checked="false"
-        android:text="Отложить готовность до" />
+        android:text="Немедленный старт"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/tvResetDelay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tvDelay"
+        android:clickable="true"
+        android:text="Сбросить"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TimePicker
         android:id="@+id/tpReadyTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/cbDelayedStart" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tvResetDelay" />
+
+
 </RelativeLayout>

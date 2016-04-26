@@ -30,7 +30,7 @@ public class MainActivity extends FragmentActivity
     public static final String SaunaInfoTag = "SaunaInfoTag";
 
     private SaunaSettings mSaunaSettings = new SaunaSettings();
-    private SaunaInfo mSaunaInfo;
+    private SaunaInfo mSaunaInfo = new SaunaInfo();
     private Timer mTimer;
 
     private IModbusActor mActivityActor = new Modbus4jActor("192.168.1.77", 502);
@@ -263,6 +263,7 @@ public class MainActivity extends FragmentActivity
     }
 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
         if (isChecked != mSaunaInfo.SaunaOn) {
             if (isChecked) { // при включении показать диалог
                 mTimer.cancel();
