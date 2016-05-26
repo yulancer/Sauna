@@ -28,7 +28,8 @@
         android:layout_below="@+id/tvDelay"
         android:clickable="true"
         android:text="Сбросить"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:focusable="true"/>
 
     <TimePicker
         android:id="@+id/tpReadyTime"

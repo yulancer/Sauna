@@ -1,8 +1,10 @@
 package ru.yulancer.sauna;
 
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
@@ -65,9 +67,9 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
                 .setNegativeButton(android.R.string.cancel, null).create();
 
         mTpReadyTime = (TimePicker) form.findViewById(R.id.tpReadyTime);
+        mTpReadyTime.setIs24HourView(true);
         if (mTpReadyTime != null) {
             mDialogStartTime = new LocalTime();
-            DateTimeFormatter fmt = DateTimeFormat.shortTime().withLocale(getResources().getConfiguration().locale);
             LocalTime readyTime = mDialogStartTime.plusSeconds((int) mSecondsRemain);
             mTpReadyTime.setCurrentHour(readyTime.getHourOfDay());
             mTpReadyTime.setCurrentMinute(readyTime.getMinuteOfHour());
@@ -88,10 +90,10 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
         mTvResetDelay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StartSaunaDialog.this.onResetDelayClick(v);
+                mTpReadyTime.setCurrentHour(17);
+                mTpReadyTime.setCurrentMinute(59);
             }
         });
-
         return dialog;
     }
 
@@ -105,6 +107,7 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
             delayMillis = 24 * 3600 * 1000 - delayMillis;
         }
         mSecondsDelay = delayMillis / 1000;
+        boolean noDelay = delayMillis < 70000;
         DateTimeFormatter fmt = ISODateTimeFormat.hourMinute();
         PeriodFormatter formatter = new PeriodFormatterBuilder()
                 .printZeroIfSupported()
@@ -115,24 +118,19 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
         String delayTimeString = formatter.print(new Period(delayMillis));
         //String delayTimeString2 = ISOPeriodFormat.standard().print(new Period(70000));
         //String delayTimeString = new DateTime(delayMillis).toString();
-        mTvDelay.setText(String.format("Задержка на %s", delayTimeString));
-        mTvResetDelay.setEnabled(mSecondsDelay > 60);
+        mTvDelay.setText(noDelay ? "Немедленный старт" : String.format("Задержка на %s", delayTimeString));
+        mTvResetDelay.setVisibility(noDelay ? View.INVISIBLE : View.VISIBLE);
 
     }
 
-    public void onResetDelayClick(View v) {
-        mSecondsDelay = 0;
-        LocalTime noDelayReadyTime = mDialogStartTime.plusSeconds((int) mSecondsRemain);
-        mTpReadyTime.setCurrentHour(noDelayReadyTime.getHourOfDay());
-        mTpReadyTime.setCurrentMinute(noDelayReadyTime.getMinuteOfHour());
-        mTpReadyTime.invalidate();
-    }
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
+            mListener.setStartSaunaDialog(this);
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -142,6 +140,7 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
     @Override
     public void onDetach() {
         super.onDetach();
+        mListener.setStartSaunaDialog(null);
         mListener = null;
     }
 
@@ -152,5 +151,7 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
 
     public interface OnFragmentInteractionListener {
         void onStartSauna(long startDelay);
+        StartSaunaDialog getStartSaunaDialog();
+        void setStartSaunaDialog(StartSaunaDialog startSaunaDialog);
     }
 }

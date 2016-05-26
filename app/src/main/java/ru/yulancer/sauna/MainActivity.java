@@ -2,8 +2,10 @@ package ru.yulancer.sauna;
 
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.UiThread;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import org.joda.time.LocalTime;
@@ -37,6 +40,8 @@ public class MainActivity extends FragmentActivity
     //private IModbusActor mActivityActor = new Modbus4jActor("10.0.2.2", 502);
     //private IModbusActor mActivityActor = new J2modActor("10.0.2.2", 502);
 
+    StartSaunaDialog mStartSaunaDialog;
+
     @Override
     public void onSaveSettings(SaunaSettings saunaSettings) {
         mSaunaSettings = saunaSettings;
@@ -49,6 +54,16 @@ public class MainActivity extends FragmentActivity
         mSaunaInfo.SecondsBeforeStartRequested = startDelay;
         DelayedStartSaunaTask t = new DelayedStartSaunaTask();
         t.execute();
+    }
+
+    @Override
+    public StartSaunaDialog getStartSaunaDialog() {
+        return mStartSaunaDialog;
+    }
+
+    @Override
+    public void setStartSaunaDialog(StartSaunaDialog startSaunaDialog) {
+        mStartSaunaDialog = startSaunaDialog;
     }
 
     class SaunaQueryTask extends TimerTask {
@@ -321,5 +336,24 @@ public class MainActivity extends FragmentActivity
         FragmentManager fm = getSupportFragmentManager();
         SettingsDialog dialog = SettingsDialog.newInstance(mSaunaSettings);
         dialog.show(fm, "settings");
+    }
+
+    @UiThread
+    public void onResetDelayClick(View v) {
+        StartSaunaDialog dialog = getStartSaunaDialog();
+        if (dialog != null) {
+            dialog.mSecondsDelay = 0;
+            dialog.mTpReadyTime.setIs24HourView(true);
+            LocalTime noDelayReadyTime = dialog.mDialogStartTime.plusSeconds((int) dialog.mSecondsRemain);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                dialog.mTpReadyTime.setHour(noDelayReadyTime.getHourOfDay());
+                dialog.mTpReadyTime.setMinute(noDelayReadyTime.getMinuteOfHour());
+            } else {
+                int hour = 15;// noDelayReadyTime.getHourOfDay();
+                int min = 30; //noDelayReadyTime.getMinuteOfHour();
+                dialog.mTpReadyTime.setCurrentMinute(min);
+                dialog.mTpReadyTime.setCurrentHour(hour);
+            }
+        }
     }
 }
