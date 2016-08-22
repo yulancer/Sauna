@@ -120,6 +120,16 @@
                 android:textSize="@dimen/big_temperature_size"
                 android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/tvWaterPressure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tempBoilerCurrent"
+                android:layout_centerHorizontal="true"
+                android:text="давление \??.\?"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/water_pressure_size" />
+
             <ImageView
                 android:id="@+id/ivBoilerHeaterStatus"
                 android:layout_width="wrap_content"
