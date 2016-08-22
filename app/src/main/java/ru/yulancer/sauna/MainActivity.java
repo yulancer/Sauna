@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import org.joda.time.LocalTime;
@@ -195,6 +194,10 @@ public class MainActivity extends FragmentActivity
                     t6.setText(String.format("%.0f", mSaunaInfo.BoilerSetpoint));
                 if (t7 != null)
                     t7.setText(String.format("%.0f", mSaunaInfo.RoomSetpoint));
+
+                TextView tvWaterPressure = (TextView) findViewById(R.id.tvWaterPressure);
+                if (tvWaterPressure != null)
+                    tvWaterPressure.setText(String.format("давление %.1f", mSaunaInfo.WaterPressure));
 
                 if (ivSaunaHeaterStatus != null)
                     ivSaunaHeaterStatus.setVisibility(mSaunaInfo.SaunaHeaterOn ? View.VISIBLE : View.INVISIBLE);
