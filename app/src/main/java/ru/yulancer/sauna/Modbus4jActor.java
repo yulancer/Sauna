@@ -68,6 +68,7 @@ public class Modbus4jActor implements IModbusActor {
         batch.addLocator(12, BaseLocator.holdingRegister(slaveId, 24, DataType.FOUR_BYTE_INT_UNSIGNED_SWAPPED));
         batch.addLocator(13, BaseLocator.holdingRegister(slaveId, 26, DataType.FOUR_BYTE_INT_UNSIGNED_SWAPPED));
         batch.addLocator(14, BaseLocator.holdingRegister(slaveId, 28, DataType.FOUR_BYTE_INT_UNSIGNED_SWAPPED));
+        batch.addLocator(15, BaseLocator.holdingRegister(slaveId, 30, DataType.FOUR_BYTE_FLOAT_SWAPPED));
 
         try {
             master.init();
@@ -108,6 +109,10 @@ public class Modbus4jActor implements IModbusActor {
             saunaInfo.AllSecondsRemain = results.getLongValue(12);
             saunaInfo.SecondsBeforeStartRequested = results.getLongValue(13);
             saunaInfo.SecondsBeforeStartRemain = results.getLongValue(14);
+
+            float waterPressure = results.getFloatValue(15);
+            // может ошибочно писать большое давление при наличии разрежения в трубе
+            saunaInfo.WaterPressure = Math.abs(waterPressure) > 10 ? 0 : waterPressure;
         }
         return saunaInfo;
     }

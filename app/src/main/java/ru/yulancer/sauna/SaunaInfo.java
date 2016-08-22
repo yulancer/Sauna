@@ -16,6 +16,7 @@ public class SaunaInfo implements Parcelable {
     public float SaunaSetpoint;
     public float BoilerSetpoint;
     public float RoomSetpoint;
+    public float WaterPressure;
     public boolean SaunaHeaterOn;
     public boolean BoilerHeaterOn;
     public boolean RoomHeaterOn;
@@ -49,6 +50,7 @@ public class SaunaInfo implements Parcelable {
         RoomCurrentTemp = in.readFloat();
         WaterPipeCurrentTemp = in.readFloat();
         OutdoorCurrentTemp = in.readFloat();
+        WaterPressure = in.readFloat();
         SaunaSetpoint = in.readFloat();
         BoilerSetpoint = in.readFloat();
         RoomSetpoint = in.readFloat();
@@ -95,6 +97,7 @@ public class SaunaInfo implements Parcelable {
         dest.writeFloat(RoomCurrentTemp);
         dest.writeFloat(WaterPipeCurrentTemp);
         dest.writeFloat(OutdoorCurrentTemp);
+        dest.writeFloat(WaterPressure);
         dest.writeFloat(SaunaSetpoint);
         dest.writeFloat(BoilerSetpoint);
         dest.writeFloat(RoomSetpoint);
