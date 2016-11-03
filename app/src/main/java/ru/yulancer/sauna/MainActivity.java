@@ -67,7 +67,10 @@ public class MainActivity extends FragmentActivity
 
     @Override
     public void onSetupSauna(SaunaSetupData setupData) {
-
+        if(setupData.DoReboot){
+            RebootControllerTask t = new RebootControllerTask();
+            t.execute();
+        }
     }
 
     @Override
@@ -139,6 +142,15 @@ public class MainActivity extends FragmentActivity
         }
     }
 
+    class RebootControllerTask extends BaseCommunicationTask {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            mActivityActor.RebootController();
+            recreateRefreshTimer();
+            return null;
+        }
+    }
     class StartSaunaTask extends BaseCommunicationTask {
 
         @Override
@@ -148,7 +160,6 @@ public class MainActivity extends FragmentActivity
             return null;
         }
     }
-
     class DelayedStartSaunaTask extends StartSaunaTask {
         @Override
         protected Void doInBackground(Void... params) {

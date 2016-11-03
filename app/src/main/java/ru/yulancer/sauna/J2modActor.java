@@ -92,4 +92,9 @@ public class J2modActor implements IModbusActor {
     public boolean SaveSettings(SaunaSettings saunaSettings) {
         return false;
     }
+
+    @Override
+    public void RebootController() {
+
+    }
 }

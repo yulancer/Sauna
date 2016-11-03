@@ -7,12 +7,13 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.CheckBox;
 
 public class SetupSaunaDialog extends DialogFragment implements DialogInterface.OnClickListener {
 
     private static final String ARG_PARAM = "setup_params";
     private SaunaSetupData mSaunaSetupData;
-
+    CheckBox mcbReboot;
 
     private OnFragmentInteractionListener mListener;
 
@@ -40,7 +41,9 @@ public class SetupSaunaDialog extends DialogFragment implements DialogInterface.
         // Inflate the layout for this fragment
         View form = getActivity().getLayoutInflater().inflate(R.layout.activity_setup_sauna_dialog, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        Dialog dialog = builder.setTitle("Настройки системы").setView(form)
+        mcbReboot = (CheckBox) form.findViewById(R.id.cbReboot);
+
+                Dialog dialog = builder.setTitle("Настройки системы").setView(form)
                 .setPositiveButton(android.R.string.ok, this)
                 .setNegativeButton(android.R.string.cancel, null).create();
 
@@ -70,6 +73,8 @@ public class SetupSaunaDialog extends DialogFragment implements DialogInterface.
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
+        if (mcbReboot != null)
+            mSaunaSetupData.DoReboot = mcbReboot.isChecked();
         mListener.onSetupSauna(mSaunaSetupData);
     }
 

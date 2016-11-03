@@ -9,6 +9,8 @@ import com.serotonin.modbus4j.exception.ModbusTransportException;
 import com.serotonin.modbus4j.ip.IpParameters;
 import com.serotonin.modbus4j.locator.BaseLocator;
 import com.serotonin.modbus4j.locator.NumericLocator;
+import com.serotonin.modbus4j.msg.WriteCoilRequest;
+import com.serotonin.modbus4j.msg.WriteCoilResponse;
 import com.serotonin.modbus4j.msg.WriteCoilsRequest;
 import com.serotonin.modbus4j.msg.WriteCoilsResponse;
 import com.serotonin.modbus4j.msg.WriteRegistersRequest;
@@ -172,5 +174,21 @@ public class Modbus4jActor implements IModbusActor {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void RebootController() {
+        ModbusMaster master = CreateMaster();
+
+        int slaveId = 1;
+        if (master.testSlaveNode(slaveId))
+            try {
+                int offset = (16 * 16) + 15;
+                WriteCoilRequest request = new WriteCoilRequest(slaveId, offset, true);
+                WriteCoilResponse response = (WriteCoilResponse) master.send(request);
+            } catch (ModbusTransportException e) {
+                e.printStackTrace();
+            }
+        master.destroy();
     }
 }

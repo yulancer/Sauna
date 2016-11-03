@@ -10,10 +10,10 @@
     tools:context="ru.yulancer.sauna.SetupSaunaDialog">
 
 
-    <Button
-        android:text="Button"
+    <CheckBox
+        android:text="Перезагрузить контроллер"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button"
+        android:id="@+id/cbReboot"
         android:layout_weight="1" />
 </LinearLayout>

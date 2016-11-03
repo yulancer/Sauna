@@ -8,10 +8,10 @@ import android.os.Parcelable;
  */
 
 public class SaunaSetupData implements Parcelable {
-    public boolean DummyVar;
+    public boolean DoReboot;
 
     protected SaunaSetupData(Parcel in) {
-        DummyVar = in.readByte() != 0;
+        DoReboot = in.readByte() != 0;
     }
 
     public static final Creator<SaunaSetupData> CREATOR = new Creator<SaunaSetupData>() {
@@ -37,6 +37,6 @@ public class SaunaSetupData implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeByte((byte) (DummyVar ? 1 : 0));
+        dest.writeByte((byte) (DoReboot ? 1 : 0));
     }
 }
