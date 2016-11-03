@@ -27,7 +27,7 @@ import static ru.yulancer.sauna.R.color.colorHeaterReady;
 import static ru.yulancer.sauna.R.color.colorHeaterWarming;
 
 public class MainActivity extends FragmentActivity
-        implements SettingsDialog.OnFragmentInteractionListener, CompoundButton.OnCheckedChangeListener, StartSaunaDialog.OnFragmentInteractionListener {
+        implements SettingsDialog.OnFragmentInteractionListener, CompoundButton.OnCheckedChangeListener, StartSaunaDialog.OnFragmentInteractionListener, SetupSaunaDialog.OnFragmentInteractionListener {
 
     public static final String SaunaInfoTag = "SaunaInfoTag";
 
@@ -63,6 +63,16 @@ public class MainActivity extends FragmentActivity
     @Override
     public void setStartSaunaDialog(StartSaunaDialog startSaunaDialog) {
         mStartSaunaDialog = startSaunaDialog;
+    }
+
+    @Override
+    public void onSetupSauna(SaunaSetupData setupData) {
+
+    }
+
+    @Override
+    public void setSetupSaunaDialog(SetupSaunaDialog setupSaunaDialog) {
+
     }
 
     class SaunaQueryTask extends TimerTask {
@@ -331,8 +341,10 @@ public class MainActivity extends FragmentActivity
     }
 
     public void onSetupClick(View v) {
-        Toast.makeText(this, "No setup implemented", Toast.LENGTH_SHORT).show();
-    }
+        mTimer.cancel();
+        FragmentManager fm = getSupportFragmentManager();
+        SetupSaunaDialog dialog = SetupSaunaDialog.newInstance(new SaunaSetupData());
+        dialog.show(fm, "setup");   }
 
     public void onSettingsClick(View v) {
         mTimer.cancel();
