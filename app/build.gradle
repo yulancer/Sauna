@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.1"
 
     defaultConfig {
         applicationId "ru.yulancer.sauna"
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
     }
@@ -27,9 +27,9 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile files('libs/j2mod-1.06.jar')
-    compile 'com.android.support:support-v4:23.3.0'
+    compile 'com.android.support:support-v4:25.1.0'
     compile 'com.infiniteautomation:modbus4j:3.0.0'
-    compile 'com.android.support:appcompat-v7:+'
+    compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'net.danlew:android.joda:2.9.2'
     //compile 'net.danlew:android.joda:2.9.2'
 }
