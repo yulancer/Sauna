@@ -202,8 +202,8 @@ public class MainActivity extends FragmentActivity
 
             if (mSaunaInfo.exception == null) {
                 currentTemperatureOutput(t0, mSaunaInfo.SaunaCurrentTemp, mSaunaInfo.SaunaOn, mSaunaInfo.SaunaReady);
-                currentTemperatureOutput(t1, mSaunaInfo.BoilerCurrentTemp, mSaunaInfo.SaunaOn, mSaunaInfo.BoilerReady);
-                currentTemperatureOutput(t2, mSaunaInfo.RoomCurrentTemp, mSaunaInfo.SaunaOn, mSaunaInfo.RoomReady);
+                currentTemperatureOutput(t1, mSaunaInfo.BoilerCurrentTemp, mSaunaInfo.BoilerOn, mSaunaInfo.BoilerReady);
+                currentTemperatureOutput(t2, mSaunaInfo.RoomCurrentTemp, mSaunaInfo.RoomOn, mSaunaInfo.RoomReady);
 
                 if (t3 != null)
                     t3.setText(String.format("%.1f", mSaunaInfo.WaterPipeCurrentTemp));

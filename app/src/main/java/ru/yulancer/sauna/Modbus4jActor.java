@@ -71,6 +71,7 @@ public class Modbus4jActor implements IModbusActor {
         batch.addLocator(13, BaseLocator.holdingRegister(slaveId, 26, DataType.FOUR_BYTE_INT_UNSIGNED_SWAPPED));
         batch.addLocator(14, BaseLocator.holdingRegister(slaveId, 28, DataType.FOUR_BYTE_INT_UNSIGNED_SWAPPED));
         batch.addLocator(15, BaseLocator.holdingRegister(slaveId, 30, DataType.FOUR_BYTE_FLOAT_SWAPPED));
+        batch.addLocator(16, BaseLocator.holdingRegister(slaveId, 33, DataType.TWO_BYTE_INT_UNSIGNED));
 
         try {
             master.init();
@@ -96,7 +97,6 @@ public class Modbus4jActor implements IModbusActor {
             saunaInfo.RoomHeaterOn = (flags & 8) == 8;
             saunaInfo.DoorSaunaOpen = (flags & 16) == 16;
             saunaInfo.DoorShowerOpen = (flags & 32) == 32;
-            saunaInfo.SaunaOn = (flags & 64) == 64;
             saunaInfo.SaunaReady = (flags & 128) == 128;
             saunaInfo.BoilerReady = (flags & 256) == 256;
             saunaInfo.RoomReady = (flags & 512) == 512;
@@ -115,6 +115,11 @@ public class Modbus4jActor implements IModbusActor {
             float waterPressure = results.getFloatValue(15);
             // может ошибочно писать большое давление при наличии разрежения в трубе
             saunaInfo.WaterPressure = Math.abs(waterPressure) > 10 ? 0 : waterPressure;
+
+            flags = results.getIntValue(16);
+            saunaInfo.SaunaOn = (flags & 1) == 1;
+            saunaInfo.BoilerOn = (flags & 2) == 2;
+            saunaInfo.RoomOn = (flags & 4) == 4;
         }
         return saunaInfo;
     }
