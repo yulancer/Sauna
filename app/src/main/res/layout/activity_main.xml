@@ -17,10 +17,11 @@
         android:layout_weight="1"
         android:background="@drawable/border">
 
-        <ImageView
-            android:id="@+id/imageView"
+        <ImageButton
+            android:id="@+id/ibSauna"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="3dp"
             android:src="@drawable/ic_sauna" />
 
 
@@ -102,9 +103,11 @@
         android:layout_weight="1"
         android:background="@drawable/border">
 
-        <ImageView
+        <ImageButton
+            android:id="@+id/ibBoiler"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="3dp"
             android:src="@drawable/ic_boiler" />
 
         <TextView
@@ -197,8 +200,9 @@
         android:layout_weight="1"
         android:background="@drawable/border">
 
-        <ImageView
-            android:id="@+id/imageView3"
+        <ImageButton
+            android:id="@+id/ibRoom"
+            android:layout_margin="3dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_room" />
