@@ -158,6 +158,35 @@ public class Modbus4jActor implements IModbusActor {
     }
 
     @Override
+    public void SendSwitchSignal(int commandCode) {
+        ModbusMaster master = CreateMaster();
+
+        int slaveId = 1;
+        int offset;
+        switch (commandCode){
+            case IModbusActor.SaunaHeaterCommand:
+                offset = 1;
+                break;
+            case IModbusActor.BoilerHeaterCommand:
+                offset = 1;
+                break;
+            case IModbusActor.RoomHeaterCommand:
+                offset = 1;
+                break;
+            default:
+                offset = -1;
+        }
+        if (offset != -1 && master.testSlaveNode(slaveId))
+            try {
+                WriteCoilsRequest request = new WriteCoilsRequest(slaveId, offset, new boolean[]{true});
+                WriteCoilsResponse response = (WriteCoilsResponse) master.send(request);
+            } catch (ModbusTransportException e) {
+                e.printStackTrace();
+            }
+        master.destroy();
+    }
+
+    @Override
     public boolean SaveSettings(SaunaSettings saunaSettings) {
 
         ModbusMaster master = CreateMaster();

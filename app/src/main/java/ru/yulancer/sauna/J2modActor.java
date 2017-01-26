@@ -89,6 +89,11 @@ public class J2modActor implements IModbusActor {
     }
 
     @Override
+    public void SendSwitchSignal(int commandCode) {
+
+    }
+
+    @Override
     public boolean SaveSettings(SaunaSettings saunaSettings) {
         return false;
     }

@@ -1,5 +1,8 @@
 package ru.yulancer.sauna;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -8,6 +11,7 @@ import android.os.Parcelable;
 import android.support.annotation.UiThread;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -34,6 +38,7 @@ public class MainActivity extends FragmentActivity
     private SaunaSettings mSaunaSettings = new SaunaSettings();
     private SaunaInfo mSaunaInfo = new SaunaInfo();
     private Timer mTimer;
+    private int mCommand;
 
     private IModbusActor mActivityActor = new Modbus4jActor("192.168.1.77", 502);
     //private IModbusActor mActivityActor = new Modbus4jActor("10.0.2.2", 502);
@@ -67,7 +72,7 @@ public class MainActivity extends FragmentActivity
 
     @Override
     public void onSetupSauna(SaunaSetupData setupData) {
-        if(setupData.DoReboot){
+        if (setupData.DoReboot) {
             RebootControllerTask t = new RebootControllerTask();
             t.execute();
         }
@@ -76,6 +81,54 @@ public class MainActivity extends FragmentActivity
     @Override
     public void setSetupSaunaDialog(SetupSaunaDialog setupSaunaDialog) {
 
+    }
+
+    public void onHeaterClick(View view) {
+        mTimer.cancel();
+        String heaterName;
+        boolean isOn;
+        final int switchCommand;
+        switch (view.getId()) {
+            case R.id.ibSauna:
+                heaterName = "печь сауны";
+                isOn = mSaunaInfo.SaunaOn;
+                switchCommand = IModbusActor.SaunaHeaterCommand;
+                break;
+            case R.id.ibBoiler:
+                heaterName = "бойлер";
+                isOn = mSaunaInfo.BoilerOn;
+                switchCommand = IModbusActor.BoilerHeaterCommand;
+                break;
+            case R.id.ibRoom:
+                heaterName = "отопление";
+                isOn = mSaunaInfo.RoomOn;
+                switchCommand = IModbusActor.RoomHeaterCommand;
+                break;
+            default:
+                heaterName = "неизвестный нагреватель";
+                isOn = false;
+                switchCommand = 0;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        String action = isOn ? "Включить " : "Включить ";
+        builder.setTitle("Внимание")
+                .setPositiveButton(action + heaterName, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        mCommand = switchCommand;
+                        StartHeaterTask t = new StartHeaterTask();
+                        t.execute();
+                    }
+                })
+                .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        recreateRefreshTimer();
+                    }
+                });
+        AlertDialog alert = builder.create();
+
+        alert.show();
     }
 
     class SaunaQueryTask extends TimerTask {
@@ -151,6 +204,7 @@ public class MainActivity extends FragmentActivity
             return null;
         }
     }
+
     class StartSaunaTask extends BaseCommunicationTask {
 
         @Override
@@ -160,6 +214,17 @@ public class MainActivity extends FragmentActivity
             return null;
         }
     }
+
+    class StartHeaterTask extends BaseCommunicationTask {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            mActivityActor.SendSwitchSignal(mCommand);
+            recreateRefreshTimer();
+            return null;
+        }
+    }
+
     class DelayedStartSaunaTask extends StartSaunaTask {
         @Override
         protected Void doInBackground(Void... params) {
@@ -355,7 +420,8 @@ public class MainActivity extends FragmentActivity
         mTimer.cancel();
         FragmentManager fm = getSupportFragmentManager();
         SetupSaunaDialog dialog = SetupSaunaDialog.newInstance(new SaunaSetupData());
-        dialog.show(fm, "setup");   }
+        dialog.show(fm, "setup");
+    }
 
     public void onSettingsClick(View v) {
         mTimer.cancel();

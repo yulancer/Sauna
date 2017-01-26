@@ -22,7 +22,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
-            android:src="@drawable/ic_sauna" />
+            android:src="@drawable/ic_sauna"
+            android:onClick="onHeaterClick"/>
 
 
         <TextView
@@ -108,7 +109,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
-            android:src="@drawable/ic_boiler" />
+            android:src="@drawable/ic_boiler"
+            android:onClick="onHeaterClick"/>
 
         <TextView
             android:id="@+id/tempBoilerCurrent"
@@ -205,7 +207,8 @@
             android:layout_margin="3dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_room" />
+            android:src="@drawable/ic_room"
+            android:onClick="onHeaterClick"/>
 
         <TextView
             android:id="@+id/tempRoomCurrent"
