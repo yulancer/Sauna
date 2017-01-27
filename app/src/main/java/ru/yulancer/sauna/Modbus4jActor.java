@@ -13,6 +13,8 @@ import com.serotonin.modbus4j.msg.WriteCoilRequest;
 import com.serotonin.modbus4j.msg.WriteCoilResponse;
 import com.serotonin.modbus4j.msg.WriteCoilsRequest;
 import com.serotonin.modbus4j.msg.WriteCoilsResponse;
+import com.serotonin.modbus4j.msg.WriteRegisterRequest;
+import com.serotonin.modbus4j.msg.WriteRegisterResponse;
 import com.serotonin.modbus4j.msg.WriteRegistersRequest;
 import com.serotonin.modbus4j.msg.WriteRegistersResponse;
 
@@ -162,24 +164,25 @@ public class Modbus4jActor implements IModbusActor {
         ModbusMaster master = CreateMaster();
 
         int slaveId = 1;
-        int offset;
+           int registerNumber = 32;
+        int command;
         switch (commandCode){
             case IModbusActor.SaunaHeaterCommand:
-                offset = 1;
+                command = 1;
                 break;
             case IModbusActor.BoilerHeaterCommand:
-                offset = 1;
+                command = 2;
                 break;
             case IModbusActor.RoomHeaterCommand:
-                offset = 1;
+                command = 4;
                 break;
             default:
-                offset = -1;
+                command = 0;
         }
-        if (offset != -1 && master.testSlaveNode(slaveId))
+        if (command > 0 && master.testSlaveNode(slaveId))
             try {
-                WriteCoilsRequest request = new WriteCoilsRequest(slaveId, offset, new boolean[]{true});
-                WriteCoilsResponse response = (WriteCoilsResponse) master.send(request);
+                WriteRegisterRequest request = new WriteRegisterRequest(slaveId, registerNumber, command);
+                WriteRegisterResponse response = (WriteRegisterResponse) master.send(request);
             } catch (ModbusTransportException e) {
                 e.printStackTrace();
             }

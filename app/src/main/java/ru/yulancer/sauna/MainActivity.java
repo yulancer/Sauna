@@ -110,7 +110,7 @@ public class MainActivity extends FragmentActivity
                 switchCommand = 0;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        String action = isOn ? "Включить " : "Включить ";
+        String action = isOn ? "Выключить " : "Включить ";
         builder.setTitle("Внимание")
                 .setPositiveButton(action + heaterName, new DialogInterface.OnClickListener() {
                     @Override
