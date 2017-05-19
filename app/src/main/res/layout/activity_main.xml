@@ -142,7 +142,6 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:src="@drawable/ic_heater_on" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -190,6 +189,7 @@
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textSize="@dimen/ready_time_size" />
             </LinearLayout>
+
         </LinearLayout>
 
 
