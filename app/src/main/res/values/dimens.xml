@@ -3,7 +3,7 @@
     <dimen name="activity_horizontal_margin">8dp</dimen>
     <dimen name="activity_vertical_margin">8dp</dimen>
     <dimen name="big_temperature_size">128sp</dimen>
-    <dimen name="water_pressure_size">28sp</dimen>
+    <dimen name="water_pressure_size">14sp</dimen>
     <dimen name="setpoint_size">28sp</dimen>
     <dimen name="ready_time_size">24sp</dimen>
     <dimen name="ready_warning_text_size">24sp</dimen>

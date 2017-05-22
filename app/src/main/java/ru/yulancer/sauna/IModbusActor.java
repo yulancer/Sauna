@@ -19,5 +19,6 @@ public interface IModbusActor {
     int SaunaHeaterCommand = 1;
     int BoilerHeaterCommand = 2;
     int RoomHeaterCommand = 3;
+    int WaterCommand = 4;
 }
 

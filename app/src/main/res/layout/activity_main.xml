@@ -22,8 +22,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
-            android:src="@drawable/ic_sauna"
-            android:onClick="onHeaterClick"/>
+            android:onClick="onHeaterClick"
+            android:src="@drawable/ic_sauna" />
 
 
         <TextView
@@ -109,8 +109,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
-            android:src="@drawable/ic_boiler"
-            android:onClick="onHeaterClick"/>
+            android:onClick="onHeaterClick"
+            android:src="@drawable/ic_boiler" />
 
         <TextView
             android:id="@+id/tempBoilerCurrent"
@@ -123,16 +123,6 @@
             android:textSize="@dimen/big_temperature_size"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tvWaterPressure"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:text="давление \??.\?"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="@dimen/water_pressure_size"
-            />
 
         <ImageView
             android:id="@+id/ivBoilerHeaterStatus"
@@ -142,6 +132,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:src="@drawable/ic_heater_on" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -204,11 +195,11 @@
 
         <ImageButton
             android:id="@+id/ibRoom"
-            android:layout_margin="3dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_room"
-            android:onClick="onHeaterClick"/>
+            android:layout_margin="3dp"
+            android:onClick="onHeaterClick"
+            android:src="@drawable/ic_room" />
 
         <TextView
             android:id="@+id/tempRoomCurrent"
@@ -311,7 +302,7 @@
             android:src="@drawable/ic_settings" />
 
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/imageButton3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -405,6 +396,27 @@
         </LinearLayout>
 
         <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onWaterClick"
+                android:src="@drawable/ic_water" />
+
+            <TextView
+                android:id="@+id/tvWaterPressure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\??.\?"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -414,7 +426,6 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="10"
                 android:gravity="center_horizontal|right"
                 android:orientation="vertical"
                 android:padding="3dp">
@@ -424,7 +435,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center"
-                    android:text="Данные на \??:\??:\??"
+                    android:text="обмен в \??:\??:\??"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <FrameLayout

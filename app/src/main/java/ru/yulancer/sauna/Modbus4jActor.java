@@ -33,7 +33,7 @@ public class Modbus4jActor implements IModbusActor {
         mPort = port;
     }
 
-    private ModbusMaster CreateMaster(){
+    private ModbusMaster CreateMaster() {
 
         IpParameters ipParameters = new IpParameters();
         ipParameters.setHost(mHost);
@@ -44,8 +44,9 @@ public class Modbus4jActor implements IModbusActor {
         ModbusMaster master = modbusFactory.createTcpMaster(ipParameters, false);
         master.setTimeout(600);
         master.setRetries(10);
-        return  master;
+        return master;
     }
+
     @Override
     public SaunaInfo GetSaunaInfo() {
 
@@ -122,6 +123,7 @@ public class Modbus4jActor implements IModbusActor {
             saunaInfo.SaunaOn = (flags & 1) == 1;
             saunaInfo.BoilerOn = (flags & 2) == 2;
             saunaInfo.RoomOn = (flags & 4) == 4;
+            saunaInfo.WaterOn = (flags & 8) == 8;
         }
         return saunaInfo;
     }
@@ -164,9 +166,9 @@ public class Modbus4jActor implements IModbusActor {
         ModbusMaster master = CreateMaster();
 
         int slaveId = 1;
-           int registerNumber = 32;
+        int registerNumber = 32;
         int command;
-        switch (commandCode){
+        switch (commandCode) {
             case IModbusActor.SaunaHeaterCommand:
                 command = 1;
                 break;
@@ -175,6 +177,9 @@ public class Modbus4jActor implements IModbusActor {
                 break;
             case IModbusActor.RoomHeaterCommand:
                 command = 4;
+                break;
+            case IModbusActor.WaterCommand:
+                command = 8;
                 break;
             default:
                 command = 0;

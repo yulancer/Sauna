@@ -1,7 +1,5 @@
 package ru.yulancer.sauna;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -18,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
@@ -116,7 +113,32 @@ public class MainActivity extends FragmentActivity
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         mCommand = switchCommand;
-                        StartHeaterTask t = new StartHeaterTask();
+                        SendBitCommandTask t = new SendBitCommandTask();
+                        t.execute();
+                    }
+                })
+                .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        recreateRefreshTimer();
+                    }
+                });
+        AlertDialog alert = builder.create();
+
+        alert.show();
+    }
+
+    public void onWaterClick(View view) {
+        mTimer.cancel();
+        boolean isOn = mSaunaInfo.WaterOn;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        String action = isOn ? "Выключить " : "Включить ";
+        builder.setTitle("Внимание")
+                .setPositiveButton(action + "воду", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        mCommand = IModbusActor.WaterCommand;
+                        SendBitCommandTask t = new SendBitCommandTask();
                         t.execute();
                     }
                 })
@@ -215,7 +237,7 @@ public class MainActivity extends FragmentActivity
         }
     }
 
-    class StartHeaterTask extends BaseCommunicationTask {
+    class SendBitCommandTask extends BaseCommunicationTask {
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -283,7 +305,7 @@ public class MainActivity extends FragmentActivity
 
                 TextView tvWaterPressure = (TextView) findViewById(R.id.tvWaterPressure);
                 if (tvWaterPressure != null)
-                    tvWaterPressure.setText(String.format("давление %.1f", mSaunaInfo.WaterPressure));
+                    tvWaterPressure.setText(String.format("%.1f", mSaunaInfo.WaterPressure));
 
                 if (ivSaunaHeaterStatus != null)
                     ivSaunaHeaterStatus.setVisibility(mSaunaInfo.SaunaHeaterOn ? View.VISIBLE : View.INVISIBLE);
@@ -319,7 +341,7 @@ public class MainActivity extends FragmentActivity
                 TextView tvLastSuccessfulQuery = (TextView) findViewById(R.id.tvLastSuccessfulQuery);
                 if (tvLastSuccessfulQuery != null) {
                     DateTimeFormatter fmt = DateTimeFormat.fullTime().withLocale(getResources().getConfiguration().locale);
-                    tvLastSuccessfulQuery.setText(String.format("Данные на %s", fmt.print(new LocalTime())));
+                    tvLastSuccessfulQuery.setText(String.format("Связь в %s", fmt.print(new LocalTime())));
                 }
 
             } else {
