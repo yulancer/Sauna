@@ -448,7 +448,9 @@
                         android:layout_height="32dip"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:src="@drawable/ic_connect" />
+                        android:src="@drawable/ic_connect"
+                        android:clickable="true"
+                        android:onClick="onRefreshClick"/>
 
                     <ProgressBar
                         android:id="@+id/progressBar"

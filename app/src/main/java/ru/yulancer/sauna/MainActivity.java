@@ -153,6 +153,10 @@ public class MainActivity extends FragmentActivity
         alert.show();
     }
 
+    public void  onRefreshClick(View view){
+        recreateRefreshTimer();
+    }
+
     class SaunaQueryTask extends TimerTask {
 
         //private IModbusActor mTaskActor = new Modbus4jActor("10.0.2.2", 502);
