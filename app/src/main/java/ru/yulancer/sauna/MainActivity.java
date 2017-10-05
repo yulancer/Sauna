@@ -457,16 +457,20 @@ public class MainActivity extends FragmentActivity
         StartSaunaDialog dialog = getStartSaunaDialog();
         if (dialog != null) {
             dialog.mSecondsDelay = 0;
-            dialog.mTpReadyTime.setIs24HourView(true);
             LocalTime noDelayReadyTime = dialog.mDialogStartTime.plusSeconds((int) dialog.mSecondsRemain);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                dialog.mTpReadyTime.setHour(noDelayReadyTime.getHourOfDay());
-                dialog.mTpReadyTime.setMinute(noDelayReadyTime.getMinuteOfHour());
+                int h = dialog.mTpStartTime.getHour();
+                int m = dialog.mTpStartTime.getMinute();
+                int ch = noDelayReadyTime.getHourOfDay();
+                dialog.mTpStartTime.setCurrentHour(ch);
+                dialog.mTpStartTime.setMinute(noDelayReadyTime.getMinuteOfHour());
+                h = dialog.mTpStartTime.getHour();
+                m = dialog.mTpStartTime.getMinute();
             } else {
-                int hour = 15;// noDelayReadyTime.getHourOfDay();
-                int min = 30; //noDelayReadyTime.getMinuteOfHour();
-                dialog.mTpReadyTime.setCurrentMinute(min);
-                dialog.mTpReadyTime.setCurrentHour(hour);
+                int hour = noDelayReadyTime.getHourOfDay();
+                int min = noDelayReadyTime.getMinuteOfHour();
+                dialog.mTpStartTime.setCurrentMinute(min);
+                dialog.mTpStartTime.setCurrentHour(hour);
             }
         }
     }

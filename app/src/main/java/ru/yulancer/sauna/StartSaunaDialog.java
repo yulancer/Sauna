@@ -1,7 +1,6 @@
 package ru.yulancer.sauna;
 
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
@@ -14,14 +13,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
 import org.joda.time.LocalTime;
 import org.joda.time.Period;
-import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
-import org.joda.time.format.ISOPeriodFormat;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 
@@ -32,9 +27,8 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
     long mSecondsDelay;
     LocalTime mDialogStartTime;
 
-    TextView mTvResetDelay;
     TextView mTvDelay;
-    TimePicker mTpReadyTime;
+    TimePicker mTpStartTime;
 
     private OnFragmentInteractionListener mListener;
 
@@ -62,18 +56,19 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
         // Inflate the layout for this fragment
         View form = getActivity().getLayoutInflater().inflate(R.layout.activity_start_sauna_dialog, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        Dialog dialog = builder.setTitle("Сауна будет готова к этому часу").setView(form)
+        Dialog dialog = builder.setTitle("Включить все нагреватели").setView(form)
                 .setPositiveButton(android.R.string.ok, this)
                 .setNegativeButton(android.R.string.cancel, null).create();
 
-        mTpReadyTime = (TimePicker) form.findViewById(R.id.tpReadyTime);
-        mTpReadyTime.setIs24HourView(true);
-        if (mTpReadyTime != null) {
+        mTpStartTime = (TimePicker) form.findViewById(R.id.tpReadyTime);
+        mTpStartTime.setIs24HourView(true);
+        if (mTpStartTime != null) {
             mDialogStartTime = new LocalTime();
-            LocalTime readyTime = mDialogStartTime.plusSeconds((int) mSecondsRemain);
-            mTpReadyTime.setCurrentHour(readyTime.getHourOfDay());
-            mTpReadyTime.setCurrentMinute(readyTime.getMinuteOfHour());
-            mTpReadyTime.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            LocalTime startTime = new LocalTime();
+            mTpStartTime.setCurrentHour(startTime.getHourOfDay());
+            mTpStartTime.setCurrentMinute(startTime.getMinuteOfHour());
+
+            mTpStartTime.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                 @Override
                 public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
                     calculateStartDelay(hourOfDay, minute);
@@ -83,18 +78,19 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
 
         //
         mTvDelay = (TextView) form.findViewById(R.id.tvDelay);
-        mTvResetDelay = (TextView) form.findViewById(R.id.tvResetDelay);
-        SpannableString string = new SpannableString(mTvResetDelay.getText());
-        string.setSpan(new UnderlineSpan(), 0, string.length(), 0);
-        mTvResetDelay.setText(string);
-        mTvResetDelay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTpReadyTime.setCurrentHour(17);
-                mTpReadyTime.setCurrentMinute(59);
-            }
-        });
+
         return dialog;
+    }
+
+    private void onResetTimeClick(View v) {
+        LocalTime currentTime = new LocalTime();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mTpStartTime.setHour(currentTime.getHourOfDay());
+            mTpStartTime.setMinute(currentTime.getMinuteOfHour());
+        } else {
+            mTpStartTime.setCurrentHour(currentTime.getHourOfDay());
+            mTpStartTime.setCurrentMinute(currentTime.getMinuteOfHour());
+        }
     }
 
     private void calculateStartDelay(int hourOfDay, int minute) {
@@ -119,10 +115,8 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
         //String delayTimeString2 = ISOPeriodFormat.standard().print(new Period(70000));
         //String delayTimeString = new DateTime(delayMillis).toString();
         mTvDelay.setText(noDelay ? "Немедленный старт" : String.format("Задержка на %s", delayTimeString));
-        mTvResetDelay.setVisibility(noDelay ? View.INVISIBLE : View.VISIBLE);
 
     }
-
 
 
     @Override
@@ -151,7 +145,9 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
 
     public interface OnFragmentInteractionListener {
         void onStartSauna(long startDelay);
+
         StartSaunaDialog getStartSaunaDialog();
+
         void setStartSaunaDialog(StartSaunaDialog startSaunaDialog);
     }
 }
