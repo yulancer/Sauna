@@ -153,7 +153,7 @@ public class MainActivity extends FragmentActivity
         alert.show();
     }
 
-    public void  onRefreshClick(View view){
+    public void onRefreshClick(View view) {
         recreateRefreshTimer();
     }
 
@@ -309,7 +309,7 @@ public class MainActivity extends FragmentActivity
 
                 TextView tvWaterPressure = (TextView) findViewById(R.id.tvWaterPressure);
                 if (tvWaterPressure != null)
-                    tvWaterPressure.setText(String.format("%.1f", mSaunaInfo.WaterPressure));
+                    waterPressureOutput(tvWaterPressure, mSaunaInfo.WaterPressure, mSaunaInfo.WaterOn, mSaunaInfo.WaterReady);
 
                 if (ivSaunaHeaterStatus != null)
                     ivSaunaHeaterStatus.setVisibility(mSaunaInfo.SaunaHeaterOn ? View.VISIBLE : View.INVISIBLE);
@@ -364,6 +364,17 @@ public class MainActivity extends FragmentActivity
         if (tv == null)
             return;
         tv.setText(String.format("%.1f", temp));
+        if (!isOn) {
+            tv.setTextColor(Color.BLACK);
+        } else {
+            tv.setTextColor(getResources().getColor(isReady ? colorHeaterReady : colorHeaterWarming));
+        }
+    }
+
+    private void waterPressureOutput(TextView tv, float pressure, boolean isOn, boolean isReady) {
+        if (tv == null)
+            return;
+        tv.setText(String.format("%.1f", pressure));
         if (!isOn) {
             tv.setTextColor(Color.BLACK);
         } else {

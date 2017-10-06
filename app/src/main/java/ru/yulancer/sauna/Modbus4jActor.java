@@ -107,6 +107,7 @@ public class Modbus4jActor implements IModbusActor {
             saunaInfo.BoilerRemainHistorical = (flags & 2048) == 2048;
             saunaInfo.RoomRemainHistorical = (flags & 4096) == 4096;
             saunaInfo.WarningSaunaStartedWithDoorOpen = (flags & 8192) == 8192;
+            saunaInfo.WaterReady = (flags & 16384) == 16384;
 
             saunaInfo.SaunaSecondsRemain = results.getLongValue(9);
             saunaInfo.BoilerSecondsRemain = results.getLongValue(10);

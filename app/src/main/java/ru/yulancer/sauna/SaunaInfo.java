@@ -29,6 +29,7 @@ public class SaunaInfo implements Parcelable {
     public boolean BoilerReady;
     public boolean RoomReady;
     public boolean WaterOn;
+    public boolean WaterReady;
 
     public long SaunaSecondsRemain;
     public long BoilerSecondsRemain;
@@ -69,6 +70,7 @@ public class SaunaInfo implements Parcelable {
         BoilerReady = in.readByte() != 0;
         RoomReady = in.readByte() != 0;
         WaterOn = in.readByte() != 0;
+        WaterReady = in.readByte() != 0;
         SaunaSecondsRemain = in.readLong();
         BoilerSecondsRemain = in.readLong();
         RoomSecondsRemain = in.readLong();
@@ -119,6 +121,7 @@ public class SaunaInfo implements Parcelable {
         dest.writeByte((byte) (BoilerReady ? 1 : 0));
         dest.writeByte((byte) (RoomReady ? 1 : 0));
         dest.writeByte((byte) (WaterOn ? 1 : 0));
+        dest.writeByte((byte) (WaterReady ? 1 : 0));
         dest.writeLong(SaunaSecondsRemain);
         dest.writeLong(BoilerSecondsRemain);
         dest.writeLong(RoomSecondsRemain);
