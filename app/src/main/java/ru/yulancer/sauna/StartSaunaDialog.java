@@ -94,9 +94,8 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
     }
 
     private void calculateStartDelay(int hourOfDay, int minute) {
-        LocalTime delayedReadyTime = new LocalTime(hourOfDay, minute);
-        LocalTime noDelayReadyTime = mDialogStartTime.plusSeconds((int) mSecondsRemain);
-        int delayMillis = delayedReadyTime.getMillisOfDay() - noDelayReadyTime.getMillisOfDay();
+        LocalTime userInputTime = new LocalTime(hourOfDay, minute);
+        int delayMillis = userInputTime.getMillisOfDay() - mDialogStartTime.getMillisOfDay();
         if (Math.abs(delayMillis) < 60000) //задержки меньше минуты не рассматриваем
             delayMillis = 0;
         if (delayMillis < 0) {             //время назад считаем следующими сутками
