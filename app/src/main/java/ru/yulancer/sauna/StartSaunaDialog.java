@@ -28,6 +28,8 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
     LocalTime mDialogStartTime;
 
     TextView mTvDelay;
+    TextView mTvReady;
+
     TimePicker mTpStartTime;
 
     private OnFragmentInteractionListener mListener;
@@ -79,6 +81,9 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
         //
         mTvDelay = (TextView) form.findViewById(R.id.tvDelay);
 
+        mTvReady = (TextView) form.findViewById(R.id.tvReady);
+        UpdateReadyTimeText(false);
+
         return dialog;
     }
 
@@ -94,29 +99,42 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
     }
 
     private void calculateStartDelay(int hourOfDay, int minute) {
+        boolean readyTomorrow = false;
         LocalTime userInputTime = new LocalTime(hourOfDay, minute);
         int delayMillis = userInputTime.getMillisOfDay() - mDialogStartTime.getMillisOfDay();
         if (Math.abs(delayMillis) < 60000) //задержки меньше минуты не рассматриваем
             delayMillis = 0;
         if (delayMillis < 0) {             //время назад считаем следующими сутками
             delayMillis = 24 * 3600 * 1000 - delayMillis;
+            readyTomorrow = true;
         }
         mSecondsDelay = delayMillis / 1000;
         boolean noDelay = delayMillis < 70000;
-        DateTimeFormatter fmt = ISODateTimeFormat.hourMinute();
         PeriodFormatter formatter = new PeriodFormatterBuilder()
                 .printZeroIfSupported()
                 .appendHours()
                 .appendSuffix(":")
                 .appendMinutes()
                 .toFormatter();
+
         String delayTimeString = formatter.print(new Period(delayMillis));
-        //String delayTimeString2 = ISOPeriodFormat.standard().print(new Period(70000));
-        //String delayTimeString = new DateTime(delayMillis).toString();
         mTvDelay.setText(noDelay ? "Немедленный старт" : String.format("Задержка на %s", delayTimeString));
 
+        UpdateReadyTimeText(readyTomorrow);
     }
 
+    private void UpdateReadyTimeText(boolean readyTomorrow){
+        PeriodFormatter formatter = new PeriodFormatterBuilder()
+                .printZeroIfSupported()
+                .appendHours()
+                .appendSuffix(":")
+                .appendMinutes()
+                .toFormatter();
+        LocalTime readyTime = mDialogStartTime.plusSeconds((int) mSecondsRemain).plusSeconds((int) mSecondsDelay);
+        String readyTimeString = formatter.print(new Period(readyTime.getMillisOfDay()));
+        String tomorrowString = readyTomorrow ? " завтра" : "";
+        mTvReady.setText(String.format("Готово%s в %s", tomorrowString, readyTimeString));
+    }
 
     @Override
     public void onAttach(Context context) {
