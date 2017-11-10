@@ -44,6 +44,14 @@ public class SaunaInfo implements Parcelable {
 
     public boolean WarningSaunaStartedWithDoorOpen;
 
+    public long SaunaSecondsWaiting;
+    public long BoilerSecondsWaiting;
+    public long RoomSecondsWaiting;
+    public boolean SaunaWaiting;
+    public boolean BoilerWaiting;
+    public boolean RoomWaiting;
+
+
     public SaunaInfo() {
 
     }
@@ -79,6 +87,12 @@ public class SaunaInfo implements Parcelable {
         BoilerRemainHistorical = in.readByte() != 0;
         RoomRemainHistorical = in.readByte() != 0;
         WarningSaunaStartedWithDoorOpen = in.readByte() != 0;
+        SaunaSecondsWaiting = in.readLong();
+        BoilerSecondsWaiting = in.readLong();
+        RoomSecondsWaiting = in.readLong();
+        SaunaWaiting = in.readByte() != 0;
+        BoilerWaiting = in.readByte() != 0;
+        RoomWaiting = in.readByte() != 0;
     }
 
     public static final Creator<SaunaInfo> CREATOR = new Creator<SaunaInfo>() {
@@ -130,5 +144,11 @@ public class SaunaInfo implements Parcelable {
         dest.writeByte((byte) (BoilerRemainHistorical ? 1 : 0));
         dest.writeByte((byte) (RoomRemainHistorical ? 1 : 0));
         dest.writeByte((byte) (WarningSaunaStartedWithDoorOpen ? 1 : 0));
+        dest.writeLong(SaunaSecondsWaiting);
+        dest.writeLong(BoilerSecondsWaiting);
+        dest.writeLong(RoomSecondsWaiting);
+        dest.writeByte((byte) (SaunaWaiting ? 1 : 0));
+        dest.writeByte((byte) (BoilerWaiting ? 1 : 0));
+        dest.writeByte((byte) (RoomWaiting ? 1 : 0));
     }
 }

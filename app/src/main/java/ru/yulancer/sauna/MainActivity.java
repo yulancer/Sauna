@@ -17,9 +17,12 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import org.joda.time.Duration;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -335,9 +338,12 @@ public class MainActivity extends FragmentActivity
                 if (tvDoorSauna != null)
                     tvDoorSauna.setVisibility(mSaunaInfo.WarningSaunaStartedWithDoorOpen ? View.VISIBLE : View.GONE);
 
-                remainSecondsOutput(tvSaunaReady, mSaunaInfo.SaunaSecondsRemain, mSaunaInfo.SaunaOn, mSaunaInfo.SaunaReady, mSaunaInfo.SaunaRemainHistorical);
-                remainSecondsOutput(tvBoilerReady, mSaunaInfo.BoilerSecondsRemain, mSaunaInfo.SaunaOn, mSaunaInfo.BoilerReady, mSaunaInfo.BoilerRemainHistorical);
-                remainSecondsOutput(tvRoomReady, mSaunaInfo.RoomSecondsRemain, mSaunaInfo.SaunaOn, mSaunaInfo.RoomReady, mSaunaInfo.RoomRemainHistorical);
+                remainSecondsOutput(tvSaunaReady, mSaunaInfo.SaunaSecondsRemain, mSaunaInfo.SaunaSecondsWaiting,
+                        mSaunaInfo.SaunaOn, mSaunaInfo.SaunaReady, mSaunaInfo.SaunaRemainHistorical, mSaunaInfo.SaunaWaiting);
+                remainSecondsOutput(tvBoilerReady, mSaunaInfo.BoilerSecondsRemain, mSaunaInfo.BoilerSecondsWaiting,
+                        mSaunaInfo.SaunaOn, mSaunaInfo.BoilerReady, mSaunaInfo.BoilerRemainHistorical, mSaunaInfo.BoilerWaiting);
+                remainSecondsOutput(tvRoomReady, mSaunaInfo.RoomSecondsRemain, mSaunaInfo.RoomSecondsWaiting,
+                        mSaunaInfo.SaunaOn, mSaunaInfo.RoomReady, mSaunaInfo.RoomRemainHistorical, mSaunaInfo.RoomWaiting);
 
                 ImageView connectIcon = (ImageView) findViewById(R.id.ivConnectStatus);
                 if (connectIcon != null)
@@ -382,7 +388,8 @@ public class MainActivity extends FragmentActivity
         }
     }
 
-    private void remainSecondsOutput(TextView tv, long seconds, boolean isOn, boolean isReady, boolean isHistorical) {
+    private void remainSecondsOutput(TextView tv, long seconds, long waitSeconds
+            , boolean isOn, boolean isReady, boolean isHistorical, boolean isWaining) {
         if (tv == null)
             return;
         if (!isOn) {
@@ -392,7 +399,18 @@ public class MainActivity extends FragmentActivity
         LocalTime currentTime = new LocalTime();
         DateTimeFormatter fmt = DateTimeFormat.shortTime().withLocale(getResources().getConfiguration().locale);
         LocalTime readyTime = currentTime.plusSeconds((int) seconds);
-        tv.setText(isReady || seconds == 0 ? "Готова" : String.format("Нагреется в %s", (isHistorical ? "~" : "") + fmt.print(readyTime)));
+        LocalTime startTime = currentTime.plusSeconds((int) waitSeconds);
+        Duration waitTime = new Duration(waitSeconds * 1000);
+        PeriodFormatter periodFormatter = new PeriodFormatterBuilder()
+                .appendHours()
+                .appendSuffix("ч.")
+                .appendMinutes()
+                .appendSuffix("мин.")
+                .toFormatter();
+        String waitStr = "Вкл. в " + fmt.print(startTime) + " через " + periodFormatter.print(waitTime.toPeriod()) + " ";
+        String heatStr = String.format("Готово в %s", (isHistorical ? "~" : "") + fmt.print(readyTime));
+        String outStr = (isWaining ? waitStr : "") + heatStr;
+        tv.setText(isReady || seconds == 0 ? "Готова" : outStr);
     }
 
     private void recreateRefreshTimer() {

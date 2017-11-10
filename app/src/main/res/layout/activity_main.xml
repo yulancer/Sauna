@@ -51,13 +51,15 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:gravity="bottom"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
+                android:gravity="bottom"
                 android:orientation="horizontal">
 
                 <TextView
@@ -89,7 +91,7 @@
                     android:id="@+id/tvSaunaReady"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Готово в \??"
+                    android:text=" Готово в \??"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textSize="@dimen/ready_time_size" />
             </LinearLayout>
@@ -138,13 +140,15 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:gravity="bottom"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
+                android:gravity="bottom"
                 android:orientation="horizontal">
 
                 <TextView
@@ -176,7 +180,7 @@
                     android:id="@+id/tvBoilerReady"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Готово в \??"
+                    android:text="Включится через 1 ч. 32 мин. в 19:32 Готово в \??"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textSize="@dimen/ready_time_size" />
             </LinearLayout>
@@ -226,13 +230,15 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:gravity="bottom"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
+                android:gravity="bottom"
                 android:orientation="horizontal">
 
                 <TextView
@@ -264,7 +270,7 @@
                     android:id="@+id/tvRoomReady"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Готово в \??"
+                    android:text="Включится через 1 ч. 32 мин. в 19:32 Готово в \??"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textSize="@dimen/ready_time_size" />
             </LinearLayout>
@@ -448,9 +454,9 @@
                         android:layout_height="32dip"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:src="@drawable/ic_connect"
                         android:clickable="true"
-                        android:onClick="onRefreshClick"/>
+                        android:onClick="onRefreshClick"
+                        android:src="@drawable/ic_connect" />
 
                     <ProgressBar
                         android:id="@+id/progressBar"
