@@ -27,9 +27,9 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile files('libs/j2mod-1.06.jar')
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.infiniteautomation:modbus4j:3.0.0'
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:support-v4:26.1.0'
+    compile 'com.infiniteautomation:modbus4j:3.0.3'
+    compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'net.danlew:android.joda:2.9.2'
     //compile 'net.danlew:android.joda:2.9.2'
 }
