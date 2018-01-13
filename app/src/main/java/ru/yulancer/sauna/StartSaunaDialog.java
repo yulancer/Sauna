@@ -18,8 +18,14 @@ import org.joda.time.format.PeriodFormatterBuilder;
 
 public class StartSaunaDialog extends DialogFragment implements DialogInterface.OnClickListener {
 
-    private static final String ARG_PARAM = "start_params";
+    private static final String ARG_PARAM_MAX = "max_seconds";
+    private static final String ARG_PARAM_SAUNA = "sauna_seconds";
+    private static final String ARG_PARAM_BOILER = "boiler_seconds";
+    private static final String ARG_PARAM_ROOM = "room_seconds";
     long mMaxHeatingSeconds;
+    long mSaunaHeatingSeconds;
+    long mBoilerHeatingSeconds;
+    long mRoomHeatingSeconds;
     long mRequiredToReadySeconds;
     LocalTime mDialogStartTime;
 
@@ -30,10 +36,13 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
 
     private OnFragmentInteractionListener mListener;
 
-    public static StartSaunaDialog newInstance(long secondsRemain) {
+    public static StartSaunaDialog newInstance(long secondsRemainMax, long secondsRemainSauna, long secondsRemainBoiler, long secondsRemainRoom) {
         StartSaunaDialog fragment = new StartSaunaDialog();
         Bundle args = new Bundle();
-        args.putLong(ARG_PARAM, secondsRemain);
+        args.putLong(ARG_PARAM_MAX, secondsRemainMax);
+        args.putLong(ARG_PARAM_SAUNA, secondsRemainSauna);
+        args.putLong(ARG_PARAM_BOILER, secondsRemainBoiler);
+        args.putLong(ARG_PARAM_ROOM, secondsRemainRoom);
         fragment.setArguments(args);
         return fragment;
     }
@@ -44,7 +53,10 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null) {
-            mMaxHeatingSeconds = args.getLong(ARG_PARAM);
+            mMaxHeatingSeconds = args.getLong(ARG_PARAM_MAX);
+            mSaunaHeatingSeconds = args.getLong(ARG_PARAM_SAUNA);
+            mBoilerHeatingSeconds = args.getLong(ARG_PARAM_BOILER);
+            mRoomHeatingSeconds = args.getLong(ARG_PARAM_ROOM);
         }
 
     }
@@ -109,8 +121,9 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
         if (delayMillisToStart < 0)  // если задержка отрицательная, включаем сразу
             delayMillisToStart = 0;
         mRequiredToReadySeconds = delayMillisToReady / 1000;
-        boolean noDelay = delayMillisToStart < 70000;
-        boolean partialDelay = false;
+        long minHeatingSeconds = Math.min(mSaunaHeatingSeconds, Math.min(mBoilerHeatingSeconds, mRoomHeatingSeconds));
+        boolean noDelay = mRequiredToReadySeconds < minHeatingSeconds;
+        boolean partialDelay = mRequiredToReadySeconds < mMaxHeatingSeconds && mRequiredToReadySeconds > minHeatingSeconds;
         PeriodFormatter formatter = new PeriodFormatterBuilder()
                 .printZeroIfSupported()
                 .appendHours()

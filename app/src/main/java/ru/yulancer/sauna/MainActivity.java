@@ -434,7 +434,11 @@ public class MainActivity extends FragmentActivity
             if (isChecked) { // при включении показать диалог
                 mTimer.cancel();
                 FragmentManager fm = getSupportFragmentManager();
-                StartSaunaDialog dialog = StartSaunaDialog.newInstance(mSaunaInfo.AllSecondsRemain);
+                StartSaunaDialog dialog = StartSaunaDialog.newInstance(
+                        mSaunaInfo.AllSecondsRemain,
+                        mSaunaInfo.SaunaSecondsRemain,
+                        mSaunaInfo.BoilerSecondsRemain,
+                        mSaunaInfo.RoomSecondsRemain);
                 dialog.show(fm, "start");
             } else { // просто выключить
                 mSaunaInfo.SimulateTurnOff();
