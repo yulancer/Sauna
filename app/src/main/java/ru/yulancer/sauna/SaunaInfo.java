@@ -173,4 +173,14 @@ public class SaunaInfo implements Parcelable {
     public void SimulateTurnOn() {
         this.SaunaWaiting = true;
     }
+
+    public boolean SaunaHeaterIconOn() {
+        return this.SaunaHeaterOn || SaunaWaiting;
+    }
+    public boolean BoilerHeaterIconOn() {
+        return this.BoilerHeaterOn || BoilerWaiting;
+    }
+    public boolean RoomHeaterIconOn() {
+        return this.RoomHeaterOn || RoomWaiting;
+    }
 }

@@ -315,12 +315,18 @@ public class MainActivity extends FragmentActivity
                 if (tvWaterPressure != null)
                     waterPressureOutput(tvWaterPressure, mSaunaInfo.WaterPressure, mSaunaInfo.WaterOn, mSaunaInfo.WaterReady);
 
-                if (ivSaunaHeaterStatus != null)
-                    ivSaunaHeaterStatus.setVisibility(mSaunaInfo.SaunaHeaterOn ? View.VISIBLE : View.INVISIBLE);
-                if (ivBoilerHeaterStatus != null)
-                    ivBoilerHeaterStatus.setVisibility(mSaunaInfo.BoilerHeaterOn ? View.VISIBLE : View.INVISIBLE);
-                if (ivRoomHeaterStatus != null)
-                    ivRoomHeaterStatus.setVisibility(mSaunaInfo.RoomHeaterOn ? View.VISIBLE : View.INVISIBLE);
+                if (ivSaunaHeaterStatus != null) {
+                    ivSaunaHeaterStatus.setVisibility(mSaunaInfo.SaunaHeaterIconOn() ? View.VISIBLE : View.INVISIBLE);
+                    ivSaunaHeaterStatus.setImageResource(mSaunaInfo.SaunaHeaterOn ? R.drawable.ic_heater_on : R.drawable.ic_hourglass);
+                }
+                if (ivBoilerHeaterStatus != null){
+                    ivBoilerHeaterStatus.setVisibility(mSaunaInfo.BoilerHeaterIconOn() ? View.VISIBLE : View.INVISIBLE);
+                    ivBoilerHeaterStatus.setImageResource(mSaunaInfo.BoilerHeaterOn ? R.drawable.ic_heater_on : R.drawable.ic_hourglass);
+                }
+                if (ivRoomHeaterStatus != null){
+                    ivRoomHeaterStatus.setVisibility(mSaunaInfo.RoomHeaterIconOn() ? View.VISIBLE : View.INVISIBLE);
+                    ivRoomHeaterStatus.setImageResource(mSaunaInfo.RoomHeaterOn ? R.drawable.ic_heater_on : R.drawable.ic_hourglass);
+                }
 
                 Switch mainSwitch = (Switch) findViewById(R.id.mainSwitch);
                 if (mainSwitch != null) {
