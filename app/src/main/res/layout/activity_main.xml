@@ -292,8 +292,8 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:showText="true"
-            android:textOff="Выключено"
-            android:textOn="Включено"
+            android:textOff="Отл.старт"
+            android:textOn="Выключить"
             android:thumb="@drawable/customswitchselector"
             android:track="@drawable/custom_track" />
 

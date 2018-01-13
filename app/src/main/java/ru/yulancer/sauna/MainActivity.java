@@ -56,6 +56,7 @@ public class MainActivity extends FragmentActivity
     @Override
     public void onStartSauna(long startDelay) {
         mSaunaInfo.SecondsBeforeStartRequested = startDelay;
+        mSaunaInfo.SimulateTurnOn();
         DelayedStartSaunaTask t = new DelayedStartSaunaTask();
         t.execute();
     }
@@ -323,7 +324,7 @@ public class MainActivity extends FragmentActivity
 
                 Switch mainSwitch = (Switch) findViewById(R.id.mainSwitch);
                 if (mainSwitch != null) {
-                    mainSwitch.setChecked(mSaunaInfo.SaunaOn);
+                    mainSwitch.setChecked(mSaunaInfo.AnythingStarted());
                 }
 
                 mSaunaSettings.SaunaSetpoint = mSaunaInfo.SaunaSetpoint;
@@ -423,14 +424,16 @@ public class MainActivity extends FragmentActivity
 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-        if (isChecked != mSaunaInfo.SaunaOn) {
+        if (isChecked != mSaunaInfo.AnythingStarted()) {
             if (isChecked) { // при включении показать диалог
                 mTimer.cancel();
                 FragmentManager fm = getSupportFragmentManager();
                 StartSaunaDialog dialog = StartSaunaDialog.newInstance(mSaunaInfo.AllSecondsRemain);
                 dialog.show(fm, "start");
             } else { // просто выключить
-                StartSaunaTask t = new StartSaunaTask();
+                mSaunaInfo.SimulateTurnOff();
+                mSaunaInfo.SecondsBeforeStartRequested = 0;
+                DelayedStartSaunaTask t = new DelayedStartSaunaTask();
                 t.execute();
             }
         }
@@ -438,6 +441,7 @@ public class MainActivity extends FragmentActivity
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
         if (mSaunaInfo != null) {
             outState.putParcelable(SaunaInfoTag, mSaunaInfo);
         }

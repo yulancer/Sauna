@@ -56,6 +56,16 @@ public class SaunaInfo implements Parcelable {
 
     }
 
+    public boolean AnythingWaiting(){
+        return SaunaWaiting || BoilerWaiting || RoomWaiting;
+    }
+    public boolean AnythingOn(){
+        return SaunaOn || BoilerOn || RoomOn;
+    }
+    public boolean AnythingStarted(){
+        return AnythingWaiting() || AnythingOn();
+    }
+
     protected SaunaInfo(Parcel in) {
         SaunaCurrentTemp = in.readFloat();
         BoilerCurrentTemp = in.readFloat();
@@ -150,5 +160,17 @@ public class SaunaInfo implements Parcelable {
         dest.writeByte((byte) (SaunaWaiting ? 1 : 0));
         dest.writeByte((byte) (BoilerWaiting ? 1 : 0));
         dest.writeByte((byte) (RoomWaiting ? 1 : 0));
+    }
+
+    public void SimulateTurnOff() {
+        this.RoomOn = false;
+        this.BoilerOn = false;
+        this.SaunaOn = false;
+        this.RoomWaiting = false;
+        this.BoilerWaiting = false;
+        this.SaunaWaiting = false;
+    }
+    public void SimulateTurnOn() {
+        this.SaunaWaiting = true;
     }
 }
