@@ -7,30 +7,26 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import org.joda.time.LocalTime;
 import org.joda.time.Period;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 
 public class StartSaunaDialog extends DialogFragment implements DialogInterface.OnClickListener {
 
     private static final String ARG_PARAM = "start_params";
-    long mSecondsRemain;
-    long mSecondsDelay;
+    long mMaxHeatingSeconds;
+    long mRequiredToReadySeconds;
     LocalTime mDialogStartTime;
 
     TextView mTvDelay;
     TextView mTvReady;
 
-    TimePicker mTpStartTime;
+    TimePicker mTpReadyTime;
 
     private OnFragmentInteractionListener mListener;
 
@@ -48,7 +44,7 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null) {
-            mSecondsRemain = args.getLong(ARG_PARAM);
+            mMaxHeatingSeconds = args.getLong(ARG_PARAM);
         }
 
     }
@@ -58,19 +54,20 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
         // Inflate the layout for this fragment
         View form = getActivity().getLayoutInflater().inflate(R.layout.activity_start_sauna_dialog, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        Dialog dialog = builder.setTitle("Включить все нагреватели").setView(form)
+        Dialog dialog = builder.setTitle("Время готовности").setView(form)
                 .setPositiveButton(android.R.string.ok, this)
                 .setNegativeButton(android.R.string.cancel, null).create();
 
-        mTpStartTime = (TimePicker) form.findViewById(R.id.tpReadyTime);
-        mTpStartTime.setIs24HourView(true);
-        if (mTpStartTime != null) {
+        mTpReadyTime = (TimePicker) form.findViewById(R.id.tpReadyTime);
+        mTpReadyTime.setIs24HourView(true);
+        if (mTpReadyTime != null) {
             mDialogStartTime = new LocalTime();
-            LocalTime startTime = new LocalTime();
-            mTpStartTime.setCurrentHour(startTime.getHourOfDay());
-            mTpStartTime.setCurrentMinute(startTime.getMinuteOfHour());
 
-            mTpStartTime.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            LocalTime readyTime = new LocalTime().plusSeconds((int) mMaxHeatingSeconds);
+            mTpReadyTime.setCurrentHour(readyTime.getHourOfDay());
+            mTpReadyTime.setCurrentMinute(readyTime.getMinuteOfHour());
+
+            mTpReadyTime.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                 @Override
                 public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
                     calculateStartDelay(hourOfDay, minute);
@@ -90,26 +87,30 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
     private void onResetTimeClick(View v) {
         LocalTime currentTime = new LocalTime();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mTpStartTime.setHour(currentTime.getHourOfDay());
-            mTpStartTime.setMinute(currentTime.getMinuteOfHour());
+            mTpReadyTime.setHour(currentTime.getHourOfDay());
+            mTpReadyTime.setMinute(currentTime.getMinuteOfHour());
         } else {
-            mTpStartTime.setCurrentHour(currentTime.getHourOfDay());
-            mTpStartTime.setCurrentMinute(currentTime.getMinuteOfHour());
+            mTpReadyTime.setCurrentHour(currentTime.getHourOfDay());
+            mTpReadyTime.setCurrentMinute(currentTime.getMinuteOfHour());
         }
     }
 
     private void calculateStartDelay(int hourOfDay, int minute) {
         boolean readyTomorrow = false;
         LocalTime userInputTime = new LocalTime(hourOfDay, minute);
-        int delayMillis = userInputTime.getMillisOfDay() - mDialogStartTime.getMillisOfDay();
-        if (Math.abs(delayMillis) < 60000) //задержки меньше минуты не рассматриваем
-            delayMillis = 0;
-        if (delayMillis < 0) {             //время назад считаем следующими сутками
-            delayMillis = 24 * 3600 * 1000 - delayMillis;
+        int delayMillisToReady = userInputTime.getMillisOfDay() - mDialogStartTime.getMillisOfDay();
+        if (Math.abs(delayMillisToReady) < 60000) //задержки меньше минуты не рассматриваем
+            delayMillisToReady = 0;
+        if (delayMillisToReady < 0) {             //время назад считаем следующими сутками
+            delayMillisToReady = 24 * 3600 * 1000 - delayMillisToReady;
             readyTomorrow = true;
         }
-        mSecondsDelay = delayMillis / 1000;
-        boolean noDelay = delayMillis < 70000;
+        int delayMillisToStart = (int) (delayMillisToReady - mMaxHeatingSeconds * 1000);
+        if (delayMillisToStart < 0)  // если задержка отрицательная, включаем сразу
+            delayMillisToStart = 0;
+        mRequiredToReadySeconds = delayMillisToReady / 1000;
+        boolean noDelay = delayMillisToStart < 70000;
+        boolean partialDelay = false;
         PeriodFormatter formatter = new PeriodFormatterBuilder()
                 .printZeroIfSupported()
                 .appendHours()
@@ -117,8 +118,8 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
                 .appendMinutes()
                 .toFormatter();
 
-        String delayTimeString = formatter.print(new Period(delayMillis));
-        mTvDelay.setText(noDelay ? "Немедленный старт" : String.format("Задержка на %s", delayTimeString));
+        String delayTimeString = formatter.print(new Period(delayMillisToStart));
+        mTvDelay.setText(noDelay ? "Немедленный старт" : (partialDelay ? "Частичный старт" : String.format("Задержка на %s", delayTimeString)));
 
         UpdateReadyTimeText(readyTomorrow);
     }
@@ -130,7 +131,8 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
                 .appendSuffix(":")
                 .appendMinutes()
                 .toFormatter();
-        LocalTime readyTime = mDialogStartTime.plusSeconds((int) mSecondsRemain).plusSeconds((int) mSecondsDelay);
+        int remainSeconds = Math.max((int) mRequiredToReadySeconds, (int) mMaxHeatingSeconds);
+        LocalTime readyTime = mDialogStartTime.plusSeconds(remainSeconds);
         String readyTimeString = formatter.print(new Period(readyTime.getMillisOfDay()));
         String tomorrowString = readyTomorrow ? " завтра" : "";
         mTvReady.setText(String.format("Готово%s в %s", tomorrowString, readyTimeString));
@@ -157,7 +159,7 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
-        mListener.onStartSauna(mSecondsDelay);
+        mListener.onStartSauna(mRequiredToReadySeconds);
     }
 
     public interface OnFragmentInteractionListener {

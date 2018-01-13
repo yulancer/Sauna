@@ -293,7 +293,7 @@
             android:layout_centerInParent="true"
             android:showText="true"
             android:textOff="Отл.старт"
-            android:textOn="Выключить"
+            android:textOn="Выкл.всё"
             android:thumb="@drawable/customswitchselector"
             android:track="@drawable/custom_track" />
 

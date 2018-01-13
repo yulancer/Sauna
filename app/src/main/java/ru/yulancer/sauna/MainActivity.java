@@ -499,21 +499,21 @@ public class MainActivity extends FragmentActivity
     public void onResetDelayClick(View v) {
         StartSaunaDialog dialog = getStartSaunaDialog();
         if (dialog != null) {
-            dialog.mSecondsDelay = 0;
-            LocalTime noDelayReadyTime = dialog.mDialogStartTime.plusSeconds((int) dialog.mSecondsRemain);
+            dialog.mRequiredToReadySeconds = 0;
+            LocalTime noDelayReadyTime = dialog.mDialogStartTime.plusSeconds((int) dialog.mMaxHeatingSeconds);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                int h = dialog.mTpStartTime.getHour();
-                int m = dialog.mTpStartTime.getMinute();
+                int h = dialog.mTpReadyTime.getHour();
+                int m = dialog.mTpReadyTime.getMinute();
                 int ch = noDelayReadyTime.getHourOfDay();
-                dialog.mTpStartTime.setCurrentHour(ch);
-                dialog.mTpStartTime.setMinute(noDelayReadyTime.getMinuteOfHour());
-                h = dialog.mTpStartTime.getHour();
-                m = dialog.mTpStartTime.getMinute();
+                dialog.mTpReadyTime.setCurrentHour(ch);
+                dialog.mTpReadyTime.setMinute(noDelayReadyTime.getMinuteOfHour());
+                h = dialog.mTpReadyTime.getHour();
+                m = dialog.mTpReadyTime.getMinute();
             } else {
                 int hour = noDelayReadyTime.getHourOfDay();
                 int min = noDelayReadyTime.getMinuteOfHour();
-                dialog.mTpStartTime.setCurrentMinute(min);
-                dialog.mTpStartTime.setCurrentHour(hour);
+                dialog.mTpReadyTime.setCurrentMinute(min);
+                dialog.mTpReadyTime.setCurrentHour(hour);
             }
         }
     }
