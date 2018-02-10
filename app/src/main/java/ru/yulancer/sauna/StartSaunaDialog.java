@@ -79,6 +79,9 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
             mTpReadyTime.setCurrentHour(readyTime.getHourOfDay());
             mTpReadyTime.setCurrentMinute(readyTime.getMinuteOfHour());
 
+            // рассчитаем начальную задержку
+            calculateStartDelay(readyTime.getHourOfDay(), readyTime.getMinuteOfHour());
+
             mTpReadyTime.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
                 @Override
                 public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
@@ -132,7 +135,9 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
                 .toFormatter();
 
         String delayTimeString = formatter.print(new Period(delayMillisToStart));
-        mTvDelay.setText(noDelay ? "Немедленный старт" : (partialDelay ? "Частичный старт" : String.format("Задержка на %s", delayTimeString)));
+        if (mTvDelay != null) {
+            mTvDelay.setText(noDelay ? "Немедленный старт" : (partialDelay ? "Частичный старт" : String.format("Задержка на %s", delayTimeString)));
+        }
 
         UpdateReadyTimeText(readyTomorrow);
     }
@@ -148,7 +153,9 @@ public class StartSaunaDialog extends DialogFragment implements DialogInterface.
         LocalTime readyTime = mDialogStartTime.plusSeconds(remainSeconds);
         String readyTimeString = formatter.print(new Period(readyTime.getMillisOfDay()));
         String tomorrowString = readyTomorrow ? " завтра" : "";
-        mTvReady.setText(String.format("Готово%s в %s", tomorrowString, readyTimeString));
+        if (mTvReady != null) {
+            mTvReady.setText(String.format("Готово%s в %s", tomorrowString, readyTimeString));
+        }
     }
 
     @Override
