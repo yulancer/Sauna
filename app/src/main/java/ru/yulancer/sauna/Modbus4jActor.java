@@ -25,10 +25,10 @@ import java.util.List;
  */
 public class Modbus4jActor implements IModbusActor {
 
-    public String mHost;
-    public int mPort;
+    private String mHost;
+    private int mPort;
 
-    public Modbus4jActor(String host, int port) {
+    Modbus4jActor(String host, int port) {
         mHost = host;
         mPort = port;
     }
@@ -92,6 +92,8 @@ public class Modbus4jActor implements IModbusActor {
             saunaInfo.BoilerCurrentTemp = results.getFloatValue(1);
             saunaInfo.RoomCurrentTemp = results.getFloatValue(2);
             saunaInfo.WaterPipeCurrentTemp = results.getFloatValue(3);
+            if (saunaInfo.WaterPipeCurrentTemp > 100 || saunaInfo.WaterPipeCurrentTemp < -50)
+                saunaInfo.WaterPipeCurrentTemp = 0;
             saunaInfo.OutdoorCurrentTemp = results.getFloatValue(4);
             saunaInfo.SaunaSetpoint = results.getFloatValue(5);
             saunaInfo.BoilerSetpoint = results.getFloatValue(6);
