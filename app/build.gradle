@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.3'
 
     defaultConfig {
         applicationId "ru.yulancer.sauna"
@@ -21,7 +20,12 @@ android {
         exclude 'META-INF/LICENSE.txt'
     }
 }
-
+configurations {
+    all {
+        exclude module: 'httpclient'
+        exclude module: 'commons-logging'
+    }
+}
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.13'
