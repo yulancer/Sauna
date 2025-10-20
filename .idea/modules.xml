@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Sauna.iml" filepath="$PROJECT_DIR$/Sauna.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Sauna.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Sauna.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Sauna.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Sauna.app.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Sauna.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Sauna.app.main.iml" />

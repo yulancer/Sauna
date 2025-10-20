@@ -6,10 +6,11 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.UiThread;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.UiThread;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.appcompat.app.AlertDialog;
+
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -40,7 +41,7 @@ public class MainActivity extends FragmentActivity
     private Timer mTimer;
     private int mCommand;
 
-    private IModbusActor mActivityActor = new Modbus4jActor("192.168.1.77", 502);
+    private final IModbusActor mActivityActor = new Modbus4jActor("192.168.1.77", 502);
     //private IModbusActor mActivityActor = new Modbus4jActor("10.0.2.2", 502);
     //private IModbusActor mActivityActor = new J2modActor("10.0.2.2", 502);
 
@@ -89,27 +90,29 @@ public class MainActivity extends FragmentActivity
         String heaterName;
         boolean isOn;
         final int switchCommand;
-        switch (view.getId()) {
-            case R.id.ibSauna:
-                heaterName = "печь сауны";
-                isOn = mSaunaInfo.SaunaOn;
-                switchCommand = IModbusActor.SaunaHeaterCommand;
-                break;
-            case R.id.ibBoiler:
-                heaterName = "бойлер";
-                isOn = mSaunaInfo.BoilerOn;
-                switchCommand = IModbusActor.BoilerHeaterCommand;
-                break;
-            case R.id.ibRoom:
-                heaterName = "отопление";
-                isOn = mSaunaInfo.RoomOn;
-                switchCommand = IModbusActor.RoomHeaterCommand;
-                break;
-            default:
-                heaterName = "неизвестный нагреватель";
-                isOn = false;
-                switchCommand = 0;
+        int id = view.getId();
+
+        if (id == R.id.ibSauna) {
+            heaterName = "печь сауны";
+            isOn = mSaunaInfo.SaunaOn;
+            switchCommand = IModbusActor.SaunaHeaterCommand;
+
+        } else if (id == R.id.ibBoiler) {
+            heaterName = "бойлер";
+            isOn = mSaunaInfo.BoilerOn;
+            switchCommand = IModbusActor.BoilerHeaterCommand;
+
+        } else if (id == R.id.ibRoom) {
+            heaterName = "отопление";
+            isOn = mSaunaInfo.RoomOn;
+            switchCommand = IModbusActor.RoomHeaterCommand;
+
+        } else {
+            heaterName = "неизвестный нагреватель";
+            isOn = false;
+            switchCommand = 0;
         }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         String action = isOn ? "Выключить " : "Включить ";
         builder.setTitle("Внимание")
