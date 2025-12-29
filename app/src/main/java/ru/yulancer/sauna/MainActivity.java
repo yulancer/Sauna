@@ -41,7 +41,7 @@ public class MainActivity extends FragmentActivity
     private Timer mTimer;
     private int mCommand;
 
-    private final IModbusActor mActivityActor = new Modbus4jActor("192.168.1.77", 502);
+    private IModbusActor mActivityActor;
     //private IModbusActor mActivityActor = new Modbus4jActor("10.0.2.2", 502);
     //private IModbusActor mActivityActor = new J2modActor("10.0.2.2", 502);
 
@@ -74,10 +74,23 @@ public class MainActivity extends FragmentActivity
 
     @Override
     public void onSetupSauna(SaunaSetupData setupData) {
+        // Save ModbusHost to SharedPreferences
+        if (setupData.ModbusHost != null && !setupData.ModbusHost.isEmpty()) {
+            android.content.SharedPreferences prefs = getSharedPreferences("SaunaPrefs", MODE_PRIVATE);
+            android.content.SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("modbus_host", setupData.ModbusHost);
+            editor.apply();
+
+            // Reinitialize mActivityActor with new host
+            mActivityActor = new Modbus4jActor(setupData.ModbusHost, 502);
+        }
+
         if (setupData.DoReboot) {
             RebootControllerTask t = new RebootControllerTask();
             t.execute();
         }
+
+        recreateRefreshTimer();
     }
 
     @Override
@@ -167,7 +180,13 @@ public class MainActivity extends FragmentActivity
     class SaunaQueryTask extends TimerTask {
 
         //private IModbusActor mTaskActor = new Modbus4jActor("10.0.2.2", 502);
-        private IModbusActor mTaskActor = new Modbus4jActor("192.168.1.77", 502);
+        private IModbusActor mTaskActor;
+
+        SaunaQueryTask() {
+            android.content.SharedPreferences prefs = getSharedPreferences("SaunaPrefs", MODE_PRIVATE);
+            String modbusHost = prefs.getString("modbus_host", getString(R.string.modbus_host));
+            mTaskActor = new Modbus4jActor(modbusHost, 502);
+        }
 
         private void switchProgress(boolean on) {
             ProgressBar bar = (ProgressBar) findViewById(R.id.progressBar);
@@ -473,6 +492,11 @@ public class MainActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        android.content.SharedPreferences prefs = getSharedPreferences("SaunaPrefs", MODE_PRIVATE);
+        String modbusHost = prefs.getString("modbus_host", getString(R.string.modbus_host));
+        mActivityActor = new Modbus4jActor(modbusHost, 502);
+
         Switch mainSwitch = (Switch) findViewById(R.id.mainSwitch);
         if (mainSwitch != null) {
             mainSwitch.setOnCheckedChangeListener(this);
@@ -491,7 +515,10 @@ public class MainActivity extends FragmentActivity
     public void onSetupClick(View v) {
         mTimer.cancel();
         FragmentManager fm = getSupportFragmentManager();
-        SetupSaunaDialog dialog = SetupSaunaDialog.newInstance(new SaunaSetupData());
+        SaunaSetupData setupData = new SaunaSetupData();
+        android.content.SharedPreferences prefs = getSharedPreferences("SaunaPrefs", MODE_PRIVATE);
+        setupData.ModbusHost = prefs.getString("modbus_host", getString(R.string.modbus_host));
+        SetupSaunaDialog dialog = SetupSaunaDialog.newInstance(setupData);
         dialog.show(fm, "setup");
     }
 

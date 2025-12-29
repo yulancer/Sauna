@@ -14,6 +14,7 @@ public class SetupSaunaDialog extends DialogFragment implements DialogInterface.
     private static final String ARG_PARAM = "setup_params";
     private SaunaSetupData mSaunaSetupData;
     CheckBox mcbReboot;
+    android.widget.EditText mEtModbusHost;
 
     private OnFragmentInteractionListener mListener;
 
@@ -42,8 +43,13 @@ public class SetupSaunaDialog extends DialogFragment implements DialogInterface.
         View form = getActivity().getLayoutInflater().inflate(R.layout.activity_setup_sauna_dialog, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         mcbReboot = (CheckBox) form.findViewById(R.id.cbReboot);
+        mEtModbusHost = (android.widget.EditText) form.findViewById(R.id.etModbusHost);
 
-                Dialog dialog = builder.setTitle("Настройки системы").setView(form)
+        if (mEtModbusHost != null && mSaunaSetupData != null && mSaunaSetupData.ModbusHost != null) {
+            mEtModbusHost.setText(mSaunaSetupData.ModbusHost);
+        }
+
+        Dialog dialog = builder.setTitle("Настройки системы").setView(form)
                 .setPositiveButton(android.R.string.ok, this)
                 .setNegativeButton(android.R.string.cancel, null).create();
 
@@ -75,6 +81,12 @@ public class SetupSaunaDialog extends DialogFragment implements DialogInterface.
     public void onClick(DialogInterface dialog, int which) {
         if (mcbReboot != null)
             mSaunaSetupData.DoReboot = mcbReboot.isChecked();
+        if (mEtModbusHost != null) {
+            String host = mEtModbusHost.getText().toString().trim();
+            if (!host.isEmpty()) {
+                mSaunaSetupData.ModbusHost = host;
+            }
+        }
         mListener.onSetupSauna(mSaunaSetupData);
     }
 

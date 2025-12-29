@@ -9,9 +9,11 @@ import android.os.Parcelable;
 
 public class SaunaSetupData implements Parcelable {
     public boolean DoReboot;
+    public String ModbusHost;
 
     protected SaunaSetupData(Parcel in) {
         DoReboot = in.readByte() != 0;
+        ModbusHost = in.readString();
     }
 
     public static final Creator<SaunaSetupData> CREATOR = new Creator<SaunaSetupData>() {
@@ -27,7 +29,7 @@ public class SaunaSetupData implements Parcelable {
     };
 
     public SaunaSetupData() {
-
+        ModbusHost = "192.168.1.77";
     }
 
     @Override
@@ -38,5 +40,6 @@ public class SaunaSetupData implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeByte((byte) (DoReboot ? 1 : 0));
+        dest.writeString(ModbusHost);
     }
 }

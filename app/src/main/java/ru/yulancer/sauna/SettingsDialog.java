@@ -132,6 +132,7 @@ public class SettingsDialog extends DialogFragment implements DialogInterface.On
             });
             sbRoom.setProgress((int) mSaunaSettings.RoomSetpoint);
         }
+
         return dialog;
     }
 
